@@ -639,8 +639,6 @@ Blockly.defineBlocksWithJsonArray([{
       "name": "NAME"
     }
   ],
-  "previousStatement": null,
-  "nextStatement": null,
   "colour": 150,
   "tooltip": "Do something when the input changes (eg: a button is pressed)",
   "helpUrl": ""
