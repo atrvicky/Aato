@@ -49,7 +49,7 @@
 
   <!-- the custom workspace should be loaded here -->
   <xml id="workspaceBlocks" style="display:none">
-    
+    <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="88" y="63"/>
   </xml>
 
   <!-- the custom toolbox should be loaded here -->
@@ -70,6 +70,8 @@
       <block type="logic_ternary"></block>
     </category>
     <category name="Loops" colour="#5ba55b">
+      <block type="on_start"></block>
+      <block type="forever"></block>
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -101,7 +103,7 @@
       <block type="controls_forEach">
         <field name="VAR" id="wlkA-_dUMF09mHiCp41p">j</field>
       </block>
-      <block type="controls_flow_statements">
+      <block type="controls_flow_statements" disabled="true">
         <field name="FLOW">BREAK</field>
       </block>
     </category>
@@ -142,7 +144,7 @@
         <field name="CONSTANT">PI</field>
       </block>
       <block type="math_number_property">
-        <mutation divisor_input="false"/>
+        <mutation divisor_input="false"></mutation>
         <field name="PROPERTY">EVEN</field>
         <value name="NUMBER_TO_CHECK">
           <shadow type="math_number">
@@ -159,7 +161,7 @@
         </value>
       </block>
       <block type="math_on_list">
-        <mutation op="SUM"/>
+        <mutation op="SUM"></mutation>
         <field name="OP">SUM</field>
       </block>
       <block type="math_modulo">
@@ -203,20 +205,20 @@
           </shadow>
         </value>
       </block>
-      <block type="math_random_float"/>
+      <block type="math_random_float"></block>
     </category>
     <category name="Text" colour="#5ba58c">
       <block type="text">
-        <field name="TEXT"/>
+        <field name="TEXT"></field>
       </block>
       <block type="text_join">
-        <mutation items="2"/>
+        <mutation items="2"></mutation>
       </block>
       <block type="text_append">
         <field name="VAR" id="y1V3QPfX2cgwtFc{();9">item</field>
         <value name="TEXT">
           <shadow type="text">
-            <field name="TEXT"/>
+            <field name="TEXT"></field>
           </shadow>
         </value>
       </block>
@@ -230,7 +232,7 @@
       <block type="text_isEmpty">
         <value name="VALUE">
           <shadow type="text">
-            <field name="TEXT"/>
+            <field name="TEXT"></field>
           </shadow>
         </value>
       </block>
@@ -248,7 +250,7 @@
         </value>
       </block>
       <block type="text_charAt">
-        <mutation at="true"/>
+        <mutation at="true"></mutation>
         <field name="WHERE">FROM_START</field>
         <value name="VALUE">
           <block type="variables_get">
@@ -257,7 +259,7 @@
         </value>
       </block>
       <block type="text_getSubstring">
-        <mutation at1="true" at2="true"/>
+        <mutation at1="true" at2="true"></mutation>
         <field name="WHERE1">FROM_START</field>
         <field name="WHERE2">FROM_START</field>
         <value name="STRING">
@@ -290,7 +292,7 @@
         </value>
       </block>
       <block type="text_prompt_ext">
-        <mutation type="TEXT"/>
+        <mutation type="TEXT"></mutation>
         <field name="TYPE">TEXT</field>
         <value name="TEXT">
           <shadow type="text">
@@ -301,10 +303,10 @@
     </category>
     <category name="Lists" colour="#745ba5">
       <block type="lists_create_with">
-        <mutation items="0"/>
+        <mutation items="0"></mutation>
       </block>
       <block type="lists_create_with">
-        <mutation items="3"/>
+        <mutation items="3"></mutation>
       </block>
       <block type="lists_repeat">
         <value name="NUM">
@@ -324,7 +326,7 @@
         </value>
       </block>
       <block type="lists_getIndex">
-        <mutation statement="false" at="true"/>
+        <mutation statement="false" at="true"></mutation>
         <field name="MODE">GET</field>
         <field name="WHERE">FROM_START</field>
         <value name="VALUE">
@@ -334,7 +336,7 @@
         </value>
       </block>
       <block type="lists_setIndex">
-        <mutation at="true"/>
+        <mutation at="true"></mutation>
         <field name="MODE">SET</field>
         <field name="WHERE">FROM_START</field>
         <value name="LIST">
@@ -344,7 +346,7 @@
         </value>
       </block>
       <block type="lists_getSublist">
-        <mutation at1="true" at2="true"/>
+        <mutation at1="true" at2="true"></mutation>
         <field name="WHERE1">FROM_START</field>
         <field name="WHERE2">FROM_START</field>
         <value name="LIST">
@@ -354,7 +356,7 @@
         </value>
       </block>
       <block type="lists_split">
-        <mutation mode="SPLIT"/>
+        <mutation mode="SPLIT"></mutation>
         <field name="MODE">SPLIT</field>
         <value name="DELIM">
           <shadow type="text">
@@ -372,10 +374,64 @@
       <block type="csl_led_toggle">
         <field name="NAME">1</field>
       </block>
+      <block type="led_on">
+        <field name="led_choice">1</field>
+        <field name="led_lux">100</field>
+      </block>
+      <block type="led_all_on">
+        <field name="led_lux">100</field>
+      </block>
+      <block type="led_off">
+        <field name="led_choice">1</field>
+      </block>
+      <block type="led_all_off"></block>
+      <block type="led_blink">
+        <field name="led_choice">1</field>
+        <field name="led_lux">100</field>
+        <field name="led_time">0.5</field>
+      </block>
+      <block type="led_fade">
+        <field name="led_choice">1</field>
+        <field name="led_lux">100</field>
+      </block>
     </category>
-    <sep></sep>
-    <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
-    <category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
+    <category name="Motors" colour="#745ba5">
+      <block type="run_motor">
+        <field name="motor_choice">1</field>
+        <field name="motor_speed">100</field>
+      </block>
+      <block type="brake_motor">
+        <field name="motor_choice">1</field>
+      </block>
+      <block type="brake_all_motor"></block>
+    </category>
+    <category name="Sensors" colour="#995ba5">
+      <block type="read_ir">
+        <field name="ir_choice">1</field>
+      </block>
+    </category>
+    <category name="IO" colour="#5ba58c">
+      <block type="read_gpio">
+        <field name="gpio_choice">0</field>
+      </block>
+      <block type="read_gpio_pup">
+        <field name="gpio_choice">0</field>
+      </block>
+      <block type="write_gpio">
+        <field name="gpio_choice">0</field>
+        <value name="NAME">
+          <shadow type="gpio_on">
+            <field name="gpio_choice">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="toggle_gpio">
+        <field name="gpio_choice">0</field>
+      </block>
+      <block type="gpio_state_listener">
+        <field name="gpio_choice">0</field>
+      </block>
+    </category>
   </xml>
 
   <script src="js/injector.js"></script>
