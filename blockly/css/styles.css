@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    font-weight: normal;
+    font-size: 100%;
+  }
+  #show-code-btn, #upload-btn{
+    margin-left: 4px;
+  }
+  #main-wrapper{
+    height: 100%;
+  }
+  #blocklyArea {
+    height: 99%;
+  }
+  #code-div{
+    padding: 24px;
+    background-color: rgba(238, 238, 238, 0.685);
+  }
+  .blocklyToolboxDiv{
+    background-color: rgba(238, 238, 238, 0.685);
+  }

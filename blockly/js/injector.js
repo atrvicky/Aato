@@ -1,5 +1,5 @@
-var toolbox = document.getElementById('toolbox');
-var options = {
+let toolbox = document.getElementById('toolbox');
+let options = {
   toolbox : toolbox,
   collapse : true,
   comments : true,
@@ -30,20 +30,20 @@ var options = {
   }
 };
 
-var blocklyArea = document.getElementById('blocklyArea');
-var blocklyDiv = document.getElementById('blocklyDiv');
-var workspace = Blockly.inject(blocklyDiv, options);
-var workspaceBlocks = document.getElementById('workspaceBlocks');
+let blocklyArea = document.getElementById('blocklyArea');
+let blocklyDiv = document.getElementById('blocklyDiv');
+let workspace = Blockly.inject(blocklyDiv, options);
+let workspaceBlocks = document.getElementById('workspaceBlocks');
 
 /* Load custom workspace. */
 Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
 
 
-var onresize = function(e) {
+let onresize = function(e) {
   // Compute the absolute coordinates and dimensions of blocklyArea.
-  var element = blocklyArea;
-  var x = 0;
-  var y = 0;
+  let element = blocklyArea;
+  let x = 0;
+  let y = 0;
   do {
     x += element.offsetLeft;
     y += element.offsetTop;
@@ -51,7 +51,7 @@ var onresize = function(e) {
   } while (element);
   // Position blocklyDiv over blocklyArea.
   blocklyDiv.style.left = x + 'px';
-  blocklyDiv.style.top = y + 'px';
+  // blocklyDiv.style.top = y + 'px';
   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
   Blockly.svgResize(workspace);

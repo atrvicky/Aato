@@ -3,29 +3,12 @@
 <html>
 <head>
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Hyp: Hyp Blockly</title>
-  <style>
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
-  body {
-    background-color: #eee;
-    font-family: sans-serif;
-    overflow: hidden;
-  }
-  h1 {
-    font-weight: normal;
-    font-size: 140%;
-  }
-  table {
-    height: 100%;
-    width: 100%;
-  }
-  #blocklyArea {
-    height: 99%;
-  }
-  </style>
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/styles.css">
+
+  <title>Aato Blockly:Alpha-1</title>
+  
   <script src="js/blockly_compressed.js"></script>
 
   <!-- the js needed to code and blocks -->
@@ -44,12 +27,27 @@
 </head>
 
 <body>
-  <div id="blocklyArea"> </div>
-  <div id="blocklyDiv" style="position: absolute"></div>
+  <div class="container-fluid" id="main-wrapper">
+    <div class="row" style="height: 100%">
+        <div class="col-md-12" id="blocklyArea">
+          <div id="blocklyDiv" style="position: absolute">
+              <div id="buttons" style="position: absolute; top:0px; right:0px; z-index: 1000; padding: 16px;">
+                  <button type="button" class="btn btn-warning btn-sm" id="connect-btn">Connect</button>
+                  <button type="button" class="btn btn-success btn-sm" id="upload-btn">Upload</button>
+                  <button type="button" class="btn btn-info btn-sm" id="show-code-btn">Show code</button>
+                </div>
+        
+        </div>
+      </div>
+      <div class="col-md-0" id="code-div" style="display: none; height: 100%">
+        <pre><code id="code"></code></pre>  
+      </div>
+    </div>
+  </div>
 
   <!-- the custom workspace should be loaded here -->
   <xml id="workspaceBlocks" style="display:none">
-    <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="88" y="63"/>
+    <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="150" y="100"/>
   </xml>
 
   <!-- the custom toolbox should be loaded here -->
@@ -433,29 +431,38 @@
       </block>
     </category>
   </xml>
-
-  <script src="js/injector.js"></script>
+  
+  <script src="./js/injector.js"></script>
+  <script src="./js/bootstrap.bundle.min.js"></script>
 
   <script>
+    onresize();
   // custom button
-  // var createNum = function(){
-  //   // alert('Hi!');
-  //   Blockly.Variables.createVariable(workspace, null, 'Number');
-  //   // var vars = workspace.getAllVariables()
-  // };
-  // workspace.registerButtonCallback('createNumber', createNum);
+    let showCode = document.getElementById("show-code-btn");
+    showCode.onclick = () => {
+      let codeDiv = document.getElementById("code-div");
+      codeDivDisplay = codeDiv.style.display;
+      codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
+      blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
+      showCode.innerText = codeDivDisplay === "none" ? "Hide code" : "Show code";
+      codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
+      onresize();
+    };
   </script>
 
   <script>
   // script to debug the blocks
   function onDropBlock(event) {
     if ((event.type == Blockly.Events.BLOCK_CREATE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
-      console.log(Blockly.JavaScript.workspaceToCode(workspace));
+      //console.log(Blockly.JavaScript.workspaceToCode(workspace));
       console.log(Blockly.Python.workspaceToCode(workspace));
+      let code = document.getElementById("code");
+      code.innerText = Blockly.Python.workspaceToCode(workspace);
     }
   }
   workspace.addChangeListener(onDropBlock);
   </script>
+
 
 </body>
 </html>
