@@ -22,6 +22,7 @@ html, body {
   #code-div{
     padding: 24px;
     background-color: rgba(238, 238, 238, 0.685);
+    overflow: auto;
   }
   .blocklyToolboxDiv{
     background-color: rgba(238, 238, 238, 0.685);

@@ -25,6 +25,7 @@ function button_click() {
 function checkConnectionStatus() {
     connectBtn.innerText = connected ? "Disconnect" : "Connect";
     uploadBtn.disabled = !connected;
+    // uploadBtn.disabled = false;
 }
 
 function update_file_status(s) {
@@ -53,11 +54,14 @@ function parse_send_password(){
 }
 
 function upload(){
-    sendData('1+1');
+    let eventLoop = "import gpio, sensors, pwm, utime \n";
+    eventLoop = eventLoop + Blockly.Python.workspaceToCode(workspace);
+    console.log(eventLoop);
+    handle_put_file_select(eventLoop)
 }
 
 function sendData(data){
-    data = data.replace(/\n/g, "");
+    // data = data.replace(/\n/g, "");
     data = data + '\r\n';
     ws.send(data);
 }
@@ -247,20 +251,17 @@ function get_ver() {
     ws.send(rec);
 }
 
-function handle_put_file_select(evt) {
-    // The event holds a FileList object which is a list of File objects,
-    // but we only support single file selection at the moment.
-    let files = evt.target.files;
-
-    // Get the file info and load its data.
-    let f = files[0];
-    put_file_name = f.name;
-    let reader = new FileReader();
-    reader.onload = function(e) {
-        put_file_data = new Uint8Array(e.target.result);
-        document.getElementById('put-file-list').innerHTML = '' + escape(put_file_name) + ' - ' + put_file_data.length + ' bytes';
-        document.getElementById('put-file-button').disabled = false;
-    };
-    reader.readAsArrayBuffer(f);
+function handle_put_file_select(code) {
+    put_file_name = "event.py";
+    put_file_data = rawStringToBuffer(code);
+    put_file();
 }
 
+function rawStringToBuffer(str) {
+    let idx, len = str.length, arr = new Array( len );
+    for ( idx = 0 ; idx < len ; ++idx ) {
+        arr[ idx ] = str.charCodeAt(idx) & 0xFF;
+    }
+    // You may create an ArrayBuffer from a standard array (of values) as follows:
+    return new Uint8Array(arr);
+}

@@ -642,6 +642,24 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 150,
   "tooltip": "Do something when the input changes (eg: a button is pressed)",
   "helpUrl": ""
+},
+{
+  "type": "timer_wait",
+  "message0": "Wait %1 Seconds",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "wait_val",
+      "value": 0,
+      "min": 0,
+      "max": 300
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 345,
+  "tooltip": "Wait for specified seconds",
+  "helpUrl": ""
 }]); // END OF JSON EXTRACT
 
 function saveWorkspace(){
