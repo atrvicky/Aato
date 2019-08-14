@@ -37,13 +37,17 @@ function update_file_status(s) {
 }
 
 function sendPassword(){
+    $('#repl-password').val('');
     $('#passwordModal').on('shown.bs.modal', function () {
-        $('#repl-password').val('');
         $('#repl-password').trigger('focus');
       })
     $('#passwordModal').modal({
         'backdrop':'static',
         'show': true
+    });
+    $('#repl-password').on('input', (event) => {
+        let passCount = $('#repl-password').val().length;
+        if (passCount === 4) parse_send_password();
     });
 }
 

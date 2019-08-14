@@ -58,6 +58,7 @@
           </button>
         </div>
         <div class="modal-body">
+            <p>Enter the 4-digit pin</p>
             <input type="password" class="form-control" id="repl-password">
         </div>
         <div class="modal-footer">
@@ -70,7 +71,7 @@
 
   <!-- the custom workspace should be loaded here -->
   <xml id="workspaceBlocks" style="display:none">
-    <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="150" y="100"/>
+    <!-- <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="150" y="100"/> -->
   </xml>
 
   <!-- the custom toolbox should be loaded here -->
@@ -474,6 +475,8 @@
       codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
       blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
       showCode.innerText = codeDivDisplay === "none" ? "Hide code" : "Show code";
+      blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
+      codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
       codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
       onresize();
     };
