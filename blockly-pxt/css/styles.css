@@ -1,0 +1,38 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    font-weight: normal;
+    font-size: 100%;
+  }
+  #show-code-btn, #upload-btn{
+    margin-left: 4px;
+  }
+  #main-wrapper{
+    height: 100%;
+  }
+  #blocklyArea {
+    height: 100%;
+  }
+  #code-div{
+    padding: 24px;
+    background-color: rgba(238, 238, 238, 0.685);
+    overflow: auto;
+  }
+  .blocklyToolboxDiv{
+    background-color: rgba(238, 238, 238, 0.685);
+  }
+
+  .treeItem{
+    background-color: #a65b6e !important;
+    padding: 12px !important;
+    text-align: center !important;
+    color: white !important;
+    font-family: Segoe UI !important;
+    margin: 8px !important;
+  }

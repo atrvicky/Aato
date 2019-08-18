@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<!-- HTML file to host Blockly in a mobile WebView. -->
+<html>
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  
+  <title>Aato Blockly:Alpha-1</title>
+  
+  <script src="js/blockly_compressed.js"></script>
+  
+  <!-- the js needed to code and blocks -->
+  <script src="generators/javascript_compressed.js"></script>
+  <script src="generators/python_compressed.js"></script>
+  <script src="js/blocks_compressed.js"></script>
+  <script src="js/blocks_custom.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  
+  <!-- include the custom blocks from json -->
+  <script src="generators/gen_custom_js.js"></script>
+  <script src="generators/gen_custom_py.js"></script>
+  <script src="msg/js/en.js"></script>
+  <script src="./js/FileSaver.js"></script>
+  <!-- <script src="js/toolbox.js"></script> -->
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+  <div class="container-fluid" id="main-wrapper">
+    <div class="row" style="height: 100%">
+        <div class="col-md-12" id="blocklyArea">
+          <div id="blocklyDiv" style="position: absolute">
+              <div id="buttons" style="position: absolute; top:0px; right:0px; z-index: 1000; padding: 16px;">
+                  <button type="button" class="btn btn-warning btn-sm" id="connect-btn" onclick="button_click()">Connect</button>
+                  <button type="button" class="btn btn-success btn-sm" id="upload-btn" disabled onclick="upload()">Upload</button>
+                  <button type="button" class="btn btn-info btn-sm" id="show-code-btn">Show code</button>
+                  <p id="file-status" style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
+                </div>
+        
+        </div>
+      </div>
+      <div class="col-md-0" id="code-div" style="display: none; height: 100%">
+        <pre><code id="code"></code></pre>  
+      </div>
+    </div>
+  </div>
+
+  <!-- Enter Password modal -->  
+  <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="passwordModalCenterTitle">Enter Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <p>Enter the 4-digit pin</p>
+            <input type="password" class="form-control" id="repl-password">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="button_click()">Close</button>
+          <button type="button" class="btn btn-primary" id="password-submit-btn" onclick="parse_send_password()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the custom workspace should be loaded here -->
+  <xml id="workspaceBlocks" style="display:none">
+    <!-- <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="150" y="100"/> -->
+  </xml>
+
+  <!-- the custom toolbox should be loaded here -->
+  <xml id="toolbox" style="display: none">
+    <category name="Logic" colour="#5b80a5">
+      <block type="controls_if"></block>
+      <block type="logic_compare">
+        <field name="OP">EQ</field>
+      </block>
+      <block type="logic_operation">
+        <field name="OP">AND</field>
+      </block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean">
+        <field name="BOOL">TRUE</field>
+      </block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops" colour="#5ba55b">
+      <block type="on_start"></block>
+      <block type="forever"></block>
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil">
+        <field name="MODE">WHILE</field>
+      </block>
+      <block type="controls_for">
+        <field name="VAR" id="$zav,g$m}6HC}R(u[?Nj">i</field>
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach">
+        <field name="VAR" id="wlkA-_dUMF09mHiCp41p">j</field>
+      </block>
+      <block type="controls_flow_statements" disabled="true">
+        <field name="FLOW">BREAK</field>
+      </block>
+    </category>
+    <category name="Math" colour="#5b67a5">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">ADD</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_single">
+        <field name="OP">ROOT</field>
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">9</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_trig">
+        <field name="OP">SIN</field>
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">45</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constant">
+        <field name="CONSTANT">PI</field>
+      </block>
+      <block type="math_number_property">
+        <mutation divisor_input="false"></mutation>
+        <field name="PROPERTY">EVEN</field>
+        <value name="NUMBER_TO_CHECK">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <field name="OP">ROUND</field>
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_on_list">
+        <mutation op="SUM"></mutation>
+        <field name="OP">SUM</field>
+      </block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text" colour="#5ba58c">
+      <block type="text">
+        <field name="TEXT"></field>
+      </block>
+      <block type="text_join">
+        <mutation items="2"></mutation>
+      </block>
+      <block type="text_append">
+        <field name="VAR" id="y1V3QPfX2cgwtFc{();9">item</field>
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT"></field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_length">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_isEmpty">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT"></field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_indexOf">
+        <field name="END">FIRST</field>
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
+          </block>
+        </value>
+        <value name="FIND">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <mutation at="true"></mutation>
+        <field name="WHERE">FROM_START</field>
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <mutation at1="true" at2="true"></mutation>
+        <field name="WHERE1">FROM_START</field>
+        <field name="WHERE2">FROM_START</field>
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase">
+        <field name="CASE">UPPERCASE</field>
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_trim">
+        <field name="MODE">BOTH</field>
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_prompt_ext">
+        <mutation type="TEXT"></mutation>
+        <field name="TYPE">TEXT</field>
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Lists" colour="#745ba5">
+      <block type="lists_create_with">
+        <mutation items="0"></mutation>
+      </block>
+      <block type="lists_create_with">
+        <mutation items="3"></mutation>
+      </block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <field name="END">FIRST</field>
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <mutation statement="false" at="true"></mutation>
+        <field name="MODE">GET</field>
+        <field name="WHERE">FROM_START</field>
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <mutation at="true"></mutation>
+        <field name="MODE">SET</field>
+        <field name="WHERE">FROM_START</field>
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <mutation at1="true" at2="true"></mutation>
+        <field name="WHERE1">FROM_START</field>
+        <field name="WHERE2">FROM_START</field>
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <mutation mode="SPLIT"></mutation>
+        <field name="MODE">SPLIT</field>
+        <value name="DELIM">
+          <shadow type="text">
+            <field name="TEXT">,</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_sort">
+        <field name="TYPE">NUMERIC</field>
+        <field name="DIRECTION">1</field>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Lights" colour="#9fa55b">
+      <block type="csl_led_toggle">
+        <field name="NAME">1</field>
+      </block>
+      <block type="led_on">
+        <field name="led_choice">1</field>
+        <field name="led_lux">100</field>
+      </block>
+      <block type="led_all_on">
+        <field name="led_lux">100</field>
+      </block>
+      <block type="led_off">
+        <field name="led_choice">1</field>
+      </block>
+      <block type="led_all_off"></block>
+      <block type="led_blink">
+        <field name="led_choice">1</field>
+        <field name="led_lux">100</field>
+        <field name="led_time">0.5</field>
+      </block>
+      <block type="led_fade">
+        <field name="led_choice">1</field>
+        <field name="led_lux">100</field>
+      </block>
+    </category>
+    <category name="Motors" colour="#745ba5">
+      <block type="run_motor">
+        <field name="motor_choice">1</field>
+        <field name="motor_speed">100</field>
+      </block>
+      <block type="brake_motor">
+        <field name="motor_choice">1</field>
+      </block>
+      <block type="brake_all_motor"></block>
+    </category>
+    <category name="Sensors" colour="#995ba5">
+      <block type="read_ir">
+        <field name="ir_choice">1</field>
+      </block>
+    </category>
+    <category name="IO" colour="#5ba58c">
+      <block type="read_gpio">
+        <field name="gpio_choice">0</field>
+      </block>
+      <block type="read_gpio_pup">
+        <field name="gpio_choice">0</field>
+      </block>
+      <block type="write_gpio">
+        <field name="gpio_choice">0</field>
+        <value name="NAME">
+          <shadow type="gpio_on">
+            <field name="gpio_choice">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="toggle_gpio">
+        <field name="gpio_choice">0</field>
+      </block>
+      <block type="gpio_state_listener">
+        <field name="gpio_choice">0</field>
+      </block>
+    </category>
+    <category name="Timers" colour="#a55b80">
+        <block type="timer_wait">
+          <field name="wait_val">0</field>
+        </block>
+      </category>
+  </xml>
+  
+  <script src="./js/injector.js"></script>
+  <script src="./js/bootstrap.bundle.min.js"></script>
+  <script src="./js/comm.js"></script>
+
+  <script>
+    onresize();
+  // custom button
+    let showCode = document.getElementById("show-code-btn");
+    showCode.onclick = () => {
+      let codeDiv = document.getElementById("code-div");
+      codeDivDisplay = codeDiv.style.display;
+      codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
+      blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
+      showCode.innerText = codeDivDisplay === "none" ? "Hide code" : "Show code";
+      blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
+      codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
+      codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
+      onresize();
+    };
+  </script>
+
+  <script>
+  // script to debug the blocks
+  function onDropBlock(event) {
+    if ((event.type == Blockly.Events.BLOCK_CREATE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
+      //console.log(Blockly.JavaScript.workspaceToCode(workspace));
+      console.log(Blockly.Python.workspaceToCode(workspace));
+      let code = document.getElementById("code");
+      code.innerText = Blockly.Python.workspaceToCode(workspace);
+    }
+  }
+  workspace.addChangeListener(onDropBlock);
+  </script>
+
+
+</body>
+</html>
