@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <!-- HTML file to host Blockly in a mobile WebView. -->
 <html>
+
 <head>
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   <link rel="stylesheet" href="./css/bootstrap.min.css">
-  
+
   <title>Aato Blockly:Alpha-1</title>
-  
+
+  <script src="js/popper.min.js"></script>
   <script src="js/blockly_compressed.js"></script>
-  
+
   <!-- the js needed to code and blocks -->
   <script src="generators/javascript_compressed.js"></script>
   <script src="generators/python_compressed.js"></script>
@@ -17,7 +19,7 @@
   <script src="js/blocks_custom.js"></script>
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-ui.min.js"></script>
-  
+
   <!-- include the custom blocks from json -->
   <script src="generators/gen_custom_js.js"></script>
   <script src="generators/gen_custom_py.js"></script>
@@ -25,30 +27,67 @@
   <script src="./js/FileSaver.js"></script>
   <!-- <script src="js/toolbox.js"></script> -->
   <link rel="stylesheet" href="./css/styles.css">
+  <script defer src="./js/icons.min.js"></script>
 </head>
 
 <body>
   <div class="container-fluid" id="main-wrapper">
+    <div class="row justify-content-between"
+      style="height: 48px; text-align: center-vertical; position: relative; z-index: 1000; box-shadow: 0px 0px 5px 0px #080708;">
+      <div class="col-xs-2" style="align-self: center">
+        <h2 style="margin: auto 16px;">Aato</h2>
+      </div>
+      <div class="col-xs-2" style="align-self: center; text-align: end">
+        <div id="buttons" style="margin: auto 16px">
+          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="button_click()"
+            data-toggle="tooltip" data-placement="left" title="Connect"><i class="fas fa-link"
+              id="connect-fav"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"
+            data-toggle="tooltip" data-placement="top" title="Upload"><i class="fas fa-cloud-upload-alt"
+              id="upload-fav"></i></button>
+          <p id="file-status"
+            style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
+          <button type="button" class="btn btn-light" id="settings-btn" data-toggle="tooltip" data-placement="top"
+            title="Settings" onclick="show_settings()"><i class="fas fa-cog"></i></button>
+          <button type="button" class="btn btn-light" id="help-btn" data-toggle="tooltip" data-placement="top"
+            title="Help"><i class="fas fa-question-circle"></i></button>
+          <button type="button" class="btn btn-light" id="show-console-btn" data-toggle="tooltip" data-placement="top"
+            title="Show console"><i class="fas fa-terminal"></i></button>
+          <button type="button" class="btn btn-light" id="show-code-btn" data-toggle="tooltip" data-placement="top"
+            title="Show code"><i class="fas fa-code" id="show-code-fav"></i></button>
+        </div>
+      </div>
+    </div>
     <div class="row" style="height: 100%">
-        <div class="col-md-12" id="blocklyArea">
-          <div id="blocklyDiv" style="position: absolute">
-              <div id="buttons" style="position: absolute; top:0px; right:0px; z-index: 1000; padding: 16px;">
-                  <button type="button" class="btn btn-warning btn-sm" id="connect-btn" onclick="button_click()">Connect</button>
-                  <button type="button" class="btn btn-success btn-sm" id="upload-btn" disabled onclick="upload()">Upload</button>
-                  <button type="button" class="btn btn-info btn-sm" id="show-code-btn">Show code</button>
-                  <p id="file-status" style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
-                </div>
-        
+      <div class="col-md-12" id="blocklyArea">
+        <div id="blocklyDiv" style="position: absolute">
+
+        </div>
+        <div id="toast-wrapper" style="position:absolute; bottom:70px; right:10px">
+          <!-- Then put toasts within -->
+          <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="mr-auto">Connection Update</strong>
+                <small class="text-muted">just now</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="toast-body" style="min-width: 300px">
+                See? Just like this.
+              </div>
+            </div>
         </div>
       </div>
       <div class="col-md-0" id="code-div" style="display: none; height: 100%">
-        <pre><code id="code"></code></pre>  
+        <pre><code id="code"></code></pre>
       </div>
     </div>
   </div>
 
-  <!-- Enter Password modal -->  
-  <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalCenterTitle" aria-hidden="true">
+  <!-- Enter Password modal -->
+  <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalCenterTitle"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -58,12 +97,13 @@
           </button>
         </div>
         <div class="modal-body">
-            <p>Enter the 4-digit pin</p>
-            <input type="password" class="form-control" id="repl-password">
+          <p>Enter the 4-digit pin</p>
+          <input type="password" class="form-control" id="repl-password">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="button_click()">Close</button>
-          <button type="button" class="btn btn-primary" id="password-submit-btn" onclick="parse_send_password()">Submit</button>
+          <button type="button" class="btn btn-primary" id="password-submit-btn"
+            onclick="parse_send_password()">Submit</button>
         </div>
       </div>
     </div>
@@ -455,26 +495,27 @@
       </block>
     </category>
     <category name="Timers" colour="#a55b80">
-        <block type="timer_wait">
-          <field name="wait_val">0</field>
-        </block>
-      </category>
+      <block type="timer_wait">
+        <field name="wait_val">1</field>
+      </block>
+    </category>
   </xml>
-  
+
   <script src="./js/injector.js"></script>
   <script src="./js/bootstrap.bundle.min.js"></script>
   <script src="./js/comm.js"></script>
 
   <script>
     onresize();
-  // custom button
+    // custom button
     let showCode = document.getElementById("show-code-btn");
+    let showCodeFav = document.getElementById("show-code-fav");
     showCode.onclick = () => {
       let codeDiv = document.getElementById("code-div");
       codeDivDisplay = codeDiv.style.display;
       codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
       blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
-      showCode.innerText = codeDivDisplay === "none" ? "Hide code" : "Show code";
+      showCode.className = codeDivDisplay === "none" ? "btn btn-dark" : "btn btn-light";
       blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
       codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
       codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
@@ -483,18 +524,19 @@
   </script>
 
   <script>
-  // script to debug the blocks
-  function onDropBlock(event) {
-    if ((event.type == Blockly.Events.BLOCK_CREATE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
-      //console.log(Blockly.JavaScript.workspaceToCode(workspace));
-      console.log(Blockly.Python.workspaceToCode(workspace));
-      let code = document.getElementById("code");
-      code.innerText = Blockly.Python.workspaceToCode(workspace);
+    // script to debug the blocks
+    function onDropBlock(event) {
+      if ((event.type == Blockly.Events.BLOCK_CREATE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
+        //console.log(Blockly.JavaScript.workspaceToCode(workspace));
+        console.log(Blockly.Python.workspaceToCode(workspace));
+        let code = document.getElementById("code");
+        code.innerText = Blockly.Python.workspaceToCode(workspace);
+      }
     }
-  }
-  workspace.addChangeListener(onDropBlock);
+    workspace.addChangeListener(onDropBlock);
   </script>
 
 
 </body>
+
 </html>

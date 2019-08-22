@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     margin: 0;
+    font-family: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;
   }
   body {
     font-family: sans-serif;
@@ -28,11 +29,9 @@ html, body {
     background-color: rgba(238, 238, 238, 0.685);
   }
 
-  .treeItem{
-    background-color: #a65b6e !important;
-    padding: 12px !important;
-    text-align: center !important;
-    color: white !important;
-    font-family: Segoe UI !important;
-    margin: 8px !important;
+  .blocklyTreeRow{
+    height: auto;
+    line-height: 25px;
+    padding-left: 4px !important;
+    cursor: pointer;
   }

@@ -7,10 +7,17 @@ let put_file_data = null;
 let get_file_name = null;
 let get_file_data = null;
 let connectBtn = document.getElementById("connect-btn");
+let connectBtnFav = document.getElementById("connect-fav");
 let uploadBtn = document.getElementById("upload-btn");
+let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
+let statusToastBody = document.getElementsByClassName("toast-body")[0];
 
 checkConnectionStatus()
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 
 function button_click() {
     if (connected) {
@@ -23,17 +30,29 @@ function button_click() {
 }
 
 function checkConnectionStatus() {
-    connectBtn.innerText = connected ? "Disconnect" : "Connect";
+    connectBtnFav.className = connected ? "fas fa-unlink" : "fas fa-link";
     uploadBtn.disabled = !connected;
     // uploadBtn.disabled = false;
 }
 
 function update_file_status(s) {
-    fileStatus.innerHTML = s;
-    fileStatus.style.display = "block";
-    setInterval(() => {
-        fileStatus.style.display = "none"
-    }, 3000);
+    // fileStatus.innerHTML = s;
+    // fileStatus.style.display = "block";
+    // setInterval(() => {
+    //     fileStatus.style.display = "none"
+    // }, 3000);
+    statusToastBody.innerHTML = s;
+    $('.toast').toast({
+        'delay': 5000
+    });
+    $('.toast').toast('show');
+}
+
+function show_settings(){
+    $('.toast').toast({
+        'delay': 2000
+    });
+    $('.toast').toast('show');
 }
 
 function sendPassword(){
