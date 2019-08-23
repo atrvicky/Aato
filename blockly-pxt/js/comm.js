@@ -1,6 +1,7 @@
 let ws;
 let url = "ws://192.168.4.1:8266/"
 let connected = false;
+let instantUpload = false;
 let binary_state = 0;
 let put_file_name = null;
 let put_file_data = null;
@@ -8,10 +9,13 @@ let get_file_name = null;
 let get_file_data = null;
 let connectBtn = document.getElementById("connect-btn");
 let connectBtnFav = document.getElementById("connect-fav");
+let connectFav = '<i class="fas fa-link" id="connect-fav"></i>';
+let disconnectFav = '<i class="fas fa-unlink" id="connect-fav"></i>';
 let uploadBtn = document.getElementById("upload-btn");
 let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
 let statusToastBody = document.getElementsByClassName("toast-body")[0];
+let instantUploadSwitch = document.getElementById("instant-upload-switch");
 
 checkConnectionStatus()
 
@@ -19,7 +23,7 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
   })
 
-function button_click() {
+function initConnection() {
     if (connected) {
         ws.close();
     } else {
@@ -29,8 +33,13 @@ function button_click() {
     checkConnectionStatus();
 }
 
+instantUploadSwitch.onchange = () => {
+    instantUpload = !instantUpload;
+    uploadBtn.hidden = instantUpload;
+};
+
 function checkConnectionStatus() {
-    connectBtnFav.className = connected ? "fas fa-unlink" : "fas fa-link";
+    connectBtn.innerHTML = connected ? disconnectFav : connectFav;
     uploadBtn.disabled = !connected;
     // uploadBtn.disabled = false;
 }
@@ -49,10 +58,9 @@ function update_file_status(s) {
 }
 
 function show_settings(){
-    $('.toast').toast({
-        'delay': 2000
+    $('#settingsModal').modal({
+        'show': true
     });
-    $('.toast').toast('show');
 }
 
 function sendPassword(){
@@ -77,24 +85,32 @@ function parse_send_password(){
 }
 
 function upload(){
-    let eventLoop = "import gpio, sensors, pwm, utime \n";
-    eventLoop = eventLoop + Blockly.Python.workspaceToCode(workspace);
-    console.log(eventLoop);
-    handle_put_file_select(eventLoop)
+    if (!instantUpload){
+        let eventLoop = "import gpio, sensors, pwm, utime \n";
+        eventLoop = eventLoop + Blockly.Python.workspaceToCode(workspace);
+        console.log(eventLoop);
+        handle_put_file_select(eventLoop)
+    } else {
+        console.log("Instant Upload enabled. Disable it to enable upload functions.");
+    }
 }
 
 function sendData(data){
     // data = data.replace(/\n/g, "");
-    data = data + '\r\n';
-    ws.send(data);
+    if (connected){
+        data = data + '\r\n';
+        ws.send(data);
+    } else {
+        console.log("Websocket unavailable!");
+    }
 }
 
 function connect(url) {
+    update_file_status("Connecting..");
     ws = new WebSocket(url);
     ws.binaryType = 'arraybuffer';
     ws.onopen = function() {
-        update_file_status("Connecting..");
-
+        update_file_status("Websocket Connected.");
         let msg = ""
         ws.onmessage = function(event) {
             if (event.data instanceof ArrayBuffer) {

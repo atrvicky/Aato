@@ -1,2 +1,3 @@
 closure-library/**
 closure-library/
+blockly-pxt/node_modules/**

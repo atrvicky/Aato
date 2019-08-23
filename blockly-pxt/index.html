@@ -39,7 +39,7 @@
       </div>
       <div class="col-xs-2" style="align-self: center; text-align: end">
         <div id="buttons" style="margin: auto 16px">
-          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="button_click()"
+          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"
             data-toggle="tooltip" data-placement="left" title="Connect"><i class="fas fa-link"
               id="connect-fav"></i></button>
           <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"
@@ -47,13 +47,13 @@
               id="upload-fav"></i></button>
           <p id="file-status"
             style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
-          <button type="button" class="btn btn-light" id="settings-btn" data-toggle="tooltip" data-placement="top"
+          <button type="button" class="btn btn-light btn-sm" id="settings-btn" data-toggle="tooltip" data-placement="top"
             title="Settings" onclick="show_settings()"><i class="fas fa-cog"></i></button>
-          <button type="button" class="btn btn-light" id="help-btn" data-toggle="tooltip" data-placement="top"
+          <button type="button" class="btn btn-light btn-sm" id="help-btn" data-toggle="tooltip" data-placement="top"
             title="Help"><i class="fas fa-question-circle"></i></button>
-          <button type="button" class="btn btn-light" id="show-console-btn" data-toggle="tooltip" data-placement="top"
+          <button type="button" class="btn btn-light btn-sm" id="show-console-btn" data-toggle="tooltip" data-placement="top"
             title="Show console"><i class="fas fa-terminal"></i></button>
-          <button type="button" class="btn btn-light" id="show-code-btn" data-toggle="tooltip" data-placement="top"
+          <button type="button" class="btn btn-light btn-sm" id="show-code-btn" data-toggle="tooltip" data-placement="top"
             title="Show code"><i class="fas fa-code" id="show-code-fav"></i></button>
         </div>
       </div>
@@ -66,17 +66,17 @@
         <div id="toast-wrapper" style="position:absolute; bottom:70px; right:10px">
           <!-- Then put toasts within -->
           <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header">
-                <strong class="mr-auto">Connection Update</strong>
-                <small class="text-muted">just now</small>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="toast-body" style="min-width: 300px">
-                See? Just like this.
-              </div>
+            <div class="toast-header">
+              <strong class="mr-auto">Connection Update</strong>
+              <!-- <small class="text-muted">just now</small> -->
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
+            <div class="toast-body" style="min-width: 300px">
+              See? Just like this.
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-0" id="code-div" style="display: none; height: 100%">
@@ -101,9 +101,37 @@
           <input type="password" class="form-control" id="repl-password">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="button_click()">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="conenct()">Close</button>
           <button type="button" class="btn btn-primary" id="password-submit-btn"
             onclick="parse_send_password()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings modal -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-cog" style="margin: auto 16px auto 4px; align-self: center;"></i>
+          <h5 class="modal-title" id="settingsModalCenterTitle">Aato Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="instant-upload-switch">
+            <label class="custom-control-label" for="instant-upload-switch">Instant Upload</label>
+            <small data-toggle="tooltip" data-placement="right" title="Uploads instantly on dropping a block">
+              <i class="fas fa-info-circle"></i>
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="">Close</button>
         </div>
       </div>
     </div>
@@ -526,16 +554,22 @@
   <script>
     // script to debug the blocks
     function onDropBlock(event) {
-      if ((event.type == Blockly.Events.BLOCK_CREATE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
+      if ((event.type == Blockly.Events.BLOCK_DELETE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
         //console.log(Blockly.JavaScript.workspaceToCode(workspace));
-        console.log(Blockly.Python.workspaceToCode(workspace));
+        let json = Blockly.Python.workspaceToCode(workspace);
+        console.log(json);
         let code = document.getElementById("code");
-        code.innerText = Blockly.Python.workspaceToCode(workspace);
+        code.innerText = json;
+        if (instantUpload) {
+          console.log("Sending to console");
+          sendData(json);
+        }
       }
     }
     workspace.addChangeListener(onDropBlock);
   </script>
 
+<script src="./node_modules/monaco-editor/min/vs/loader.js"></script>
 
 </body>
 
