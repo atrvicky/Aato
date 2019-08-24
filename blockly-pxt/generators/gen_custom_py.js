@@ -155,3 +155,89 @@ Blockly.Python['timer_wait'] = function(block) {
 let mapDutyToVal = (val) => {
   return Math.ceil((val)/(100) * (4095))
 };
+
+Blockly.Python['lcd_home'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.home()\n';
+  return code;
+};
+
+Blockly.Python['lcd_clear'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.clear()\n';
+  return code;
+};
+
+Blockly.Python['lcd_set'] = function(block) {
+  var number_lcd_row = block.getFieldValue('lcd_row');
+  var number_lcd_col = block.getFieldValue('lcd_col');
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.set_cursor(' + number_lcd_col + ', ' + number_lcd_row + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_display'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.enable_display(' + dropdown_name + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_cursor'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.show_cursor(' + dropdown_name + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_blink'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.blink(' + dropdown_name + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_move_left'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.move_left()\n';
+  return code;
+};
+
+Blockly.Python['lcd_move_right'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.move_right()\n';
+  return code;
+};
+
+Blockly.Python['lcd_rtl'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var code = '';
+  if (dropdown_name == "ltr"){
+    code = 'sensors.set_left_to_right()\n';
+  } else if (dropdown_name == "rtl"){
+    code = 'sensors.set_right_to_left()\n';
+  }
+  return code;
+};
+
+Blockly.Python['lcd_autoscroll'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.autoscroll(' + dropdown_name + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_write'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = 'sensors.message(' + value_name + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_type'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'sensors.set1604(' + dropdown_name + ')\n';
+  return code;
+};

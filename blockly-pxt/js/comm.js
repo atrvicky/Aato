@@ -16,6 +16,7 @@ let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
 let statusToastBody = document.getElementsByClassName("toast-body")[0];
 let instantUploadSwitch = document.getElementById("instant-upload-switch");
+let codeDiv = document.getElementById("code-div");
 
 checkConnectionStatus()
 
@@ -103,6 +104,23 @@ function sendData(data){
     } else {
         console.log("Websocket unavailable!");
     }
+}
+
+function updateCode(code){
+    codeDiv.innerHTML = "";
+    require.config({ paths: { 'vs': './node_modules/monaco-editor/min/vs' }});
+    require(['vs/editor/editor.main'], function() {
+        var editor = monaco.editor.create(codeDiv, {
+            value: code,
+            language: 'python',
+
+            lineNumbers: "on",
+            roundedSelection: false,
+            scrollBeyondLastLine: false,
+            readOnly: true,
+            theme: "vs",
+        });
+    });
 }
 
 function connect(url) {

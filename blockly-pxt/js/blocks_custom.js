@@ -666,6 +666,239 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 345,
   "tooltip": "Wait for specified seconds",
   "helpUrl": ""
+},
+{
+  "type": "lcd_home",
+  "message0": "Go to LCD home position",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Go to position (0,0)",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_clear",
+  "message0": "Clear Screen",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Clear the screen",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_set",
+  "message0": "Set cursor to row %1 and column %2",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "lcd_row",
+      "value": 0,
+      "min": 0,
+      "max": 4,
+      "precision": 1
+    },
+    {
+      "type": "field_number",
+      "name": "lcd_col",
+      "value": 0,
+      "min": 0,
+      "max": 16,
+      "precision": 1
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Set cursor position",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_display",
+  "message0": "LCD %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "On",
+          "True"
+        ],
+        [
+          "Off",
+          "False"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Enable or disable LCD",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_cursor",
+  "message0": "Cursor %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "On",
+          "True"
+        ],
+        [
+          "Off",
+          "False"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Enable or disable cursor",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_blink",
+  "message0": "Blink Cursor %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "On",
+          "True"
+        ],
+        [
+          "Off",
+          "False"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Enable or disable cursor blink",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_move_left",
+  "message0": "Move Left",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Moves the cursor one pixel left.",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_move_right",
+  "message0": "Move Right",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Moves the cursor one pixel right",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_rtl",
+  "message0": "Display mode %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "LTR",
+          "ltr"
+        ],
+        [
+          "RTL",
+          "rtl"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "LTR or RTL display mode",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_autoscroll",
+  "message0": "Autoscroll %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "On",
+          "True"
+        ],
+        [
+          "Off",
+          "False"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Enable or disable autoscroll",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_write",
+  "message0": "Print %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "Boolean",
+        "Number",
+        "String"
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Print to screen",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_type",
+  "message0": "Set LCD type %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "16x2",
+          "False"
+        ],
+        [
+          "16x4",
+          "True"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Set 16x2 or 16x4 LCD",
+  "helpUrl": ""
 }]); // END OF JSON EXTRACT
 
 function saveWorkspace(){

@@ -74,7 +74,7 @@
               </button>
             </div>
             <div class="toast-body" style="min-width: 300px">
-              See? Just like this.
+              Toast body.
             </div>
           </div>
         </div>
@@ -143,6 +143,7 @@
   </xml>
 
   <!-- the custom toolbox should be loaded here -->
+  <!-- https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#juod54 -->
   <xml id="toolbox" style="display: none">
     <category name="Logic" colour="#5b80a5">
       <block type="controls_if"></block>
@@ -527,6 +528,41 @@
         <field name="wait_val">1</field>
       </block>
     </category>
+    <category name="Display" colour="#a5745b">
+      <block type="lcd_home"></block>
+      <block type="lcd_clear"></block>
+      <block type="lcd_set">
+        <field name="lcd_row">0</field>
+        <field name="lcd_col">0</field>
+      </block>
+      <block type="lcd_display">
+        <field name="NAME">True</field>
+      </block>
+      <block type="lcd_cursor">
+        <field name="NAME">True</field>
+      </block>
+      <block type="lcd_blink">
+        <field name="NAME">True</field>
+      </block>
+      <block type="lcd_move_left"></block>
+      <block type="lcd_move_right"></block>
+      <block type="lcd_rtl">
+        <field name="NAME">ltr</field>
+      </block>
+      <block type="lcd_autoscroll">
+        <field name="NAME">True</field>
+      </block>
+      <block type="lcd_write">
+        <value name="NAME">
+          <shadow type="text">
+            <field name="TEXT">Hello, World!</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lcd_type">
+        <field name="NAME">False</field>
+      </block>
+    </category>
   </xml>
 
   <script src="./js/injector.js"></script>
@@ -556,13 +592,14 @@
     function onDropBlock(event) {
       if ((event.type == Blockly.Events.BLOCK_DELETE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
         //console.log(Blockly.JavaScript.workspaceToCode(workspace));
-        let json = Blockly.Python.workspaceToCode(workspace);
-        console.log(json);
+        let pyCode = Blockly.Python.workspaceToCode(workspace);
+        console.log(pyCode);
         let code = document.getElementById("code");
-        code.innerText = json;
+        // code.innerText = pyCode;
+        updateCode(pyCode);
         if (instantUpload) {
           console.log("Sending to console");
-          sendData(json);
+          sendData(pyCode);
         }
       }
     }
