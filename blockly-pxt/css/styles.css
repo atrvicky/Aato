@@ -21,7 +21,7 @@ html, body {
     height: 100%;
   }
   #code-div{
-    background-color: rgba(238, 238, 238, 0.685);
+    box-shadow: -3px 7px 7px -5px #080708;
     overflow: auto;
   }
   .blocklyToolboxDiv{

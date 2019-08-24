@@ -80,7 +80,9 @@
         </div>
       </div>
       <div class="col-md-0" id="code-div" style="display: none; height: 100%">
-        <pre><code id="code"></code></pre>
+        <div id="code-div-container"style="display: block; height: 98%">
+
+        </div>
       </div>
     </div>
   </div>
@@ -582,8 +584,10 @@
       showCode.className = codeDivDisplay === "none" ? "btn btn-dark" : "btn btn-light";
       blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
       codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
+      codeDiv.style.boxShadow = codeDivDisplay === "none" && window.innerWidth < 720 ? "0px -7px 10px -10px #080708" : "-7px 0px 10px -10px #080708";
       codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
       onresize();
+      createEditor();
     };
   </script>
 
@@ -604,6 +608,7 @@
       }
     }
     workspace.addChangeListener(onDropBlock);
+
   </script>
 
 <script src="./node_modules/monaco-editor/min/vs/loader.js"></script>

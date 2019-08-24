@@ -37,6 +37,14 @@ function initConnection() {
 instantUploadSwitch.onchange = () => {
     instantUpload = !instantUpload;
     uploadBtn.hidden = instantUpload;
+    let cmd = '';
+    if (instantUpload){
+        cmd = 'liveMode(True)';
+    } else {
+        cmd = 'liveMode(False)';
+    }
+    sendData(cmd);
+    sendData('import gpio, sensors, pwm, utime');
 };
 
 function checkConnectionStatus() {
@@ -99,6 +107,7 @@ function upload(){
 function sendData(data){
     // data = data.replace(/\n/g, "");
     if (connected){
+        console.log('sending: ', data);
         data = data + '\r\n';
         ws.send(data);
     } else {
@@ -106,12 +115,15 @@ function sendData(data){
     }
 }
 
-function updateCode(code){
-    codeDiv.innerHTML = "";
+function createEditor(){
+    let pyCode = Blockly.Python.workspaceToCode(workspace);
+    pyCode = pyCode == "" ? '#Start Building to see the code here' : pyCode;
+    let editorContainer = document.getElementById('code-div-container');
+    editorContainer.innerHTML = "";
     require.config({ paths: { 'vs': './node_modules/monaco-editor/min/vs' }});
     require(['vs/editor/editor.main'], function() {
-        var editor = monaco.editor.create(codeDiv, {
-            value: code,
+        var editor = monaco.editor.create(editorContainer, {
+            value: pyCode,
             language: 'python',
 
             lineNumbers: "on",
@@ -121,6 +133,11 @@ function updateCode(code){
             theme: "vs",
         });
     });
+}
+
+function updateCode(code){
+    let model = monaco.editor.getModels()[0];
+    model.setValue(code);
 }
 
 function connect(url) {
@@ -218,7 +235,9 @@ function connect(url) {
                 connected = true;
                 update_file_status("Connected");
                 checkConnectionStatus()
-            } else {
+            } else if (msg == ">>>"){
+                update_file_status('Ready');
+            }else {
                 update_file_status(msg);
             }
         };
