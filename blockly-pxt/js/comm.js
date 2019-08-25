@@ -120,7 +120,7 @@ function createEditor(){
     pyCode = pyCode == "" ? '#Start Building to see the code here' : pyCode;
     let editorContainer = document.getElementById('code-div-container');
     editorContainer.innerHTML = "";
-    require.config({ paths: { 'vs': './node_modules/monaco-editor/min/vs' }});
+    require.config({ paths: { 'vs': './monaco-editor/min/vs' }});
     require(['vs/editor/editor.main'], function() {
         var editor = monaco.editor.create(editorContainer, {
             value: pyCode,
