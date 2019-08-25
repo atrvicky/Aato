@@ -241,3 +241,26 @@ Blockly.Python['lcd_type'] = function(block) {
   var code = 'sensors.set1604(' + dropdown_name + ')\n';
   return code;
 };
+
+Blockly.Python['servo_angle'] = function(block) {
+  var dropdown_gpio_choice = block.getFieldValue('gpio_choice');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = 'gpio.run_servo(' + dropdown_gpio_choice + ', angle=' + value_name +')\n';
+  return code;
+};
+
+Blockly.Python['servo_get_angle'] = function(block) {
+  var dropdown_gpio_choice = block.getFieldValue('gpio_choice');
+  // TODO: Assemble Python into code variable.
+  var code = 'gpio.run_servo(' + dropdown_gpio_choice + ')\n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Python['servo_release'] = function(block) {
+  var dropdown_gpio_choice = block.getFieldValue('gpio_choice');
+  // TODO: Assemble Python into code variable.
+  var code = 'gpio.release_servo(' + dropdown_gpio_choice + ')\n';
+  return code;
+};

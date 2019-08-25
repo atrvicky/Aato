@@ -899,6 +899,169 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 30,
   "tooltip": "Set 16x2 or 16x4 LCD",
   "helpUrl": ""
+},
+{
+  "type": "servo_angle",
+  "message0": "Set servo in Pin %1 to angle %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "gpio_choice",
+      "options": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "1"
+        ],
+        [
+          "2",
+          "2"
+        ],
+        [
+          "3",
+          "3"
+        ],
+        [
+          "4",
+          "4"
+        ],
+        [
+          "5",
+          "5"
+        ],
+        [
+          "6",
+          "6"
+        ],
+        [
+          "7",
+          "7"
+        ],
+        [
+          "8",
+          "8"
+        ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": "Number"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 265,
+  "tooltip": "Turn the servo motor to specified angle",
+  "helpUrl": ""
+},
+{
+  "type": "servo_get_angle",
+  "message0": "Get servoAngle %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "gpio_choice",
+      "options": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "1"
+        ],
+        [
+          "2",
+          "2"
+        ],
+        [
+          "3",
+          "3"
+        ],
+        [
+          "4",
+          "4"
+        ],
+        [
+          "5",
+          "5"
+        ],
+        [
+          "6",
+          "6"
+        ],
+        [
+          "7",
+          "7"
+        ],
+        [
+          "8",
+          "8"
+        ]
+      ]
+    }
+  ],
+  "output": "Number",
+  "colour": 265,
+  "tooltip": "Get the angle for the specified servo",
+  "helpUrl": ""
+},
+{
+  "type": "servo_release",
+  "message0": "Release servo %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "gpio_choice",
+      "options": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "1"
+        ],
+        [
+          "2",
+          "2"
+        ],
+        [
+          "3",
+          "3"
+        ],
+        [
+          "4",
+          "4"
+        ],
+        [
+          "5",
+          "5"
+        ],
+        [
+          "6",
+          "6"
+        ],
+        [
+          "7",
+          "7"
+        ],
+        [
+          "8",
+          "8"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 265,
+  "tooltip": "Release the servo motor",
+  "helpUrl": ""
 }]); // END OF JSON EXTRACT
 
 function saveWorkspace(){
