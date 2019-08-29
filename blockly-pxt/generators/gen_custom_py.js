@@ -223,8 +223,18 @@ Blockly.Python['lcd_rtl'] = function(block) {
 
 Blockly.Python['lcd_autoscroll'] = function(block) {
   var dropdown_name = block.getFieldValue('NAME');
+  var number_scrollspeed = block.getFieldValue('scrollSpeed');
   // TODO: Assemble Python into code variable.
-  var code = 'sensors.autoscroll(' + dropdown_name + ')\n';
+  var dely = map_range(number_scrollspeed, 0, 100, 250, 0);
+  var code = 'sensors.autoscroll(' + dropdown_name + ', scrollDelay=' + dely  + ')\n';
+  return code;
+};
+
+Blockly.Python['lcd_brightness'] = function(block) {
+  var number_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var brightness = map_range(number_name, 0, 100, 4095, 0);
+  var code = 'pwm.setLCDBrightness(' + brightness + ')\n';
   return code;
 };
 
@@ -264,3 +274,7 @@ Blockly.Python['servo_release'] = function(block) {
   var code = 'gpio.release_servo(' + dropdown_gpio_choice + ')\n';
   return code;
 };
+
+function map_range(value, in_low, in_high, out_low, out_high) {
+  return Math.ceil(out_low + (out_high - out_low) * (value - in_low) / (in_high - in_low));
+}

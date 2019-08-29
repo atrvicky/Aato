@@ -832,7 +832,7 @@ Blockly.defineBlocksWithJsonArray([{
 },
 {
   "type": "lcd_autoscroll",
-  "message0": "Autoscroll %1",
+  "message0": "Autoscroll %1 scroll speed %2",
   "args0": [
     {
       "type": "field_dropdown",
@@ -847,12 +847,39 @@ Blockly.defineBlocksWithJsonArray([{
           "False"
         ]
       ]
+    },
+    {
+      "type": "field_number",
+      "name": "scrollSpeed",
+      "value": 100,
+      "min": 0,
+      "max": 100,
+      "precision": 1
     }
   ],
   "previousStatement": null,
   "nextStatement": null,
   "colour": 30,
   "tooltip": "Enable or disable autoscroll",
+  "helpUrl": ""
+},
+{
+  "type": "lcd_brightness",
+  "message0": "Contrast %1",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "NAME",
+      "value": 100,
+      "min": 0,
+      "max": 100,
+      "precision": 1
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Set screen contrast",
   "helpUrl": ""
 },
 {
