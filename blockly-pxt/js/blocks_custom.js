@@ -883,6 +883,31 @@ Blockly.defineBlocksWithJsonArray([{
   "helpUrl": ""
 },
 {
+  "type": "lcd_backlight",
+  "message0": "Backlight %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "On",
+          "True"
+        ],
+        [
+          "Off",
+          "False"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 30,
+  "tooltip": "Enable or disable backlight",
+  "helpUrl": ""
+},
+{
   "type": "lcd_write",
   "message0": "Print %1",
   "args0": [

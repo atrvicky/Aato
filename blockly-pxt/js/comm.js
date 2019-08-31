@@ -223,7 +223,7 @@ function connect(url) {
                 }
             }
             let msg = event.data;
-            console.log(msg);
+            console.log('incoming: ',  msg);
 
             if (msg.match(/Password:/g) != null){
                 sendPassword();

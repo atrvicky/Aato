@@ -548,8 +548,8 @@
       <block type="lcd_home"></block>
       <block type="lcd_clear"></block>
       <block type="lcd_set">
-        <field name="lcd_row">0</field>
-        <field name="lcd_col">0</field>
+        <field name="lcd_row">1</field>
+        <field name="lcd_col">1</field>
       </block>
       <block type="lcd_display">
         <field name="NAME">True</field>
@@ -558,6 +558,9 @@
         <field name="NAME">True</field>
       </block>
       <block type="lcd_blink">
+        <field name="NAME">True</field>
+      </block>
+      <block type="lcd_backlight">
         <field name="NAME">True</field>
       </block>
       <block type="lcd_move_left"></block>
@@ -610,18 +613,26 @@
   </script>
 
   <script>
+
+    // a variable to hold the timeout functions
+    let timeOut;
+
     // script to debug the blocks
     function onDropBlock(event) {
+      clearTimeout(timeOut);
       if ((event.type == Blockly.Events.BLOCK_DELETE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
         //console.log(Blockly.JavaScript.workspaceToCode(workspace));
         let pyCode = Blockly.Python.workspaceToCode(workspace);
-        console.log(pyCode);
+        // console.log(pyCode);
         let code = document.getElementById("code");
         // code.innerText = pyCode;
         updateCode(pyCode);
+
         if (instantUpload) {
-          console.log("Sending to console");
-          sendData(pyCode);
+          timeOut = setTimeout(() => {
+            console.log("Sending to console");
+            sendData(pyCode);
+          }, 500);
         }
       }
     }
