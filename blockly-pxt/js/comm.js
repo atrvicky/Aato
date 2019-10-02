@@ -9,8 +9,8 @@ let get_file_name = null;
 let get_file_data = null;
 let connectBtn = document.getElementById("connect-btn");
 let connectBtnFav = document.getElementById("connect-fav");
-let connectFav = '<i class="fas fa-link" id="connect-fav"></i>';
-let disconnectFav = '<i class="fas fa-unlink" id="connect-fav"></i>';
+let connectFav = '<i class="fas fa-link" id="connect-fav"></i> Connect';
+let disconnectFav = '<i class="fas fa-unlink" id="connect-fav"></i> Disconnect';
 let uploadBtn = document.getElementById("upload-btn");
 let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
@@ -22,7 +22,7 @@ checkConnectionStatus()
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
-  })
+})
 
 function initConnection() {
     if (connected) {

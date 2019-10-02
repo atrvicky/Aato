@@ -39,22 +39,16 @@
       </div>
       <div class="col-xs-2" style="align-self: center; text-align: end">
         <div id="buttons" style="margin: auto 16px">
-          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"
-            data-toggle="tooltip" data-placement="left" title="Connect"><i class="fas fa-link"
+          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i class="fas fa-link"
               id="connect-fav"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"
-            data-toggle="tooltip" data-placement="top" title="Upload"><i class="fas fa-cloud-upload-alt"
-              id="upload-fav"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"><i class="fas fa-cloud-upload-alt"
+              id="upload-fav"></i> Upload</button>
           <p id="file-status"
             style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
-          <button type="button" class="btn btn-light btn-sm" id="settings-btn" data-toggle="tooltip" data-placement="top"
-            title="Settings" onclick="show_settings()"><i class="fas fa-cog"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="help-btn" data-toggle="tooltip" data-placement="top"
-            title="Help"><i class="fas fa-question-circle"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="show-console-btn" data-toggle="tooltip" data-placement="top"
-            title="Show console"><i class="fas fa-terminal"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="show-code-btn" data-toggle="tooltip" data-placement="top"
-            title="Show code"><i class="fas fa-code" id="show-code-fav"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="show_settings()"><i class="fas fa-cog"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="help-btn" style="display: none"><i class="fas fa-question-circle"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="show-console-btn" style="display: none"><i class="fas fa-terminal"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="show-code-btn"><i class="fas fa-code" id="show-code-fav"></i> Code</button>
         </div>
       </div>
     </div>
@@ -586,6 +580,8 @@
         <field name="NAME">False</field>
       </block>
     </category>
+    <sep></sep>
+    <category name="Variables" colour="#ff2400" custom="VARIABLE"></category>
   </xml>
 
   <script src="./js/injector.js"></script>

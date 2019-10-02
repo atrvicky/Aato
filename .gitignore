@@ -2,3 +2,4 @@ closure-library/**
 closure-library/
 blockly-pxt/node_modules/**
 blockly-pxt/monaco-editor/**
+pxt-blockly/
