@@ -56,3 +56,12 @@ html, body {
   .added-remote-item-name{
     margin-bottom: 0px;
   }
+
+  .error-modal-header{
+    background: #ff2400;
+    color: white;
+  }
+
+  .error-modal-header .close{
+    color: white;
+  }

@@ -31,8 +31,8 @@ window.addEventListener('load', () => {
 
 let initiateRemoteMode = () => {
     windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;    
-    if (windowWidth > 720){
+    windowHeight = window.innerHeight;
+    if (windowWidth > 720) {
         let remoteDivDisplay = remoteDiv.style.display;
         remoteDiv.className = remoteDivDisplay === "none" ? "col-md-3" : "col-md-0";
         blocklyArea.className = remoteDivDisplay === "none" ? "col-md-9" : "col-md-12";
@@ -40,7 +40,7 @@ let initiateRemoteMode = () => {
         // blocklyArea.style.height = remoteDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
         // remoteDiv.style.height = remoteDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
         remoteDiv.style.boxShadow = remoteDivDisplay === "none" && window.innerWidth < 720 ? "0px -7px 10px -10px #080708" : "-7px 0px 10px -10px #080708";
-        remoteDiv.style.display = remoteDivDisplay === "none" ? "block" : "none";        
+        remoteDiv.style.display = remoteDivDisplay === "none" ? "block" : "none";
         onresize();
         remoteInitated();
     } else {
@@ -51,9 +51,9 @@ let initiateRemoteMode = () => {
 let remoteInitated = () => {
     $('#remote-items-available').html(maxRemoteLimit - addedRemoteQuantity);
 
-    if(remoteElements.length > 0){
+    if (remoteElements.length > 0) {
         $('#no-item-msg-container').hide();
-        $('#remote-item-list-container').show();        
+        $('#remote-item-list-container').show();
     } else {
         $('#no-item-msg-container').show();
         $('#remote-item-list-container').hide();
@@ -68,34 +68,47 @@ let remoteInitated = () => {
 };
 
 addJoystickBtn.onclick = () => {
-    addedRemoteQuantity++;
-    joystickCount++;
-    let childId = 'remote-joystick-' + joystickCount;
-    let childElement = addedItemTemplate();
-    childElement = childElement.replace('{{added-item-id}}', childId);
-    childElement = childElement.replace('{{item-img}}', './images/joystick.png');
-    childElement = childElement.replace('{{item-alt}}', 'Joystick Controller-' + joystickCount);
-    childElement = childElement.replace('{{item-name}}', 'Joystick-' + joystickCount);
-    childElement = childElement.replace('{{delete-remote-btn}}', 'delete-remote-item-' + joystickCount);
-    childElement = childElement.replace('deleteRemoteItem()', 'deleteRemoteItem(\'' + childId + '\')');
-    console.log(childElement);
-    childElement = remoteItemsContainer.innerHTML + childElement;
-    remoteElements.push(childId);
-    remoteItemsContainer.innerHTML = childElement;
-    $('#remoteShowcaseModal').modal('hide');
-    remoteInitated();
+    createChild('joystick');
 };
 
 addSliderBtn.onclick = () => {
+    createChild('slider');
+};
+
+let createChild = (itemType) => {
+    let itemCode = '';
+    let itemName = '';
+    let itemCount = 0;
     addedRemoteQuantity++;
-    sliderCount++;
-    let childId = 'remote-slider-' + sliderCount;
+
+    switch (itemType){
+        case 'joystick':
+            joystickCount++;
+            itemCode = 'joystick';
+            itemName = 'Joystick';
+            itemCount = joystickCount;
+            break;
+        case 'slider':
+            sliderCount++;
+            itemCode = 'slider';
+            itemName = 'Linear Slider';
+            itemCount = sliderCount;
+            break;
+    }
+
+    let childId = 'remote-' + itemCode + '-' + itemCount;
     let childElement = addedItemTemplate();
+    // add unique item id 
     childElement = childElement.replace('{{added-item-id}}', childId);
-    childElement = childElement.replace('{{item-img}}', './images/slider.png');
-    childElement = childElement.replace('{{item-alt}}', 'Linear Slider-' + sliderCount);
-    childElement = childElement.replace('{{item-name}}', 'Linear Slider-' + sliderCount);
-    childElement = childElement.replace('{{delete-remote-btn}}', 'delete-remote-item-' + sliderCount);
+    // load the image resource
+    childElement = childElement.replace('{{item-img}}', './images/' + itemCode +'.png');
+    // set the image description
+    childElement = childElement.replace('{{item-alt}}', itemName + ' Controller-' + itemCount);
+    // display item name
+    childElement = childElement.replace('{{item-name}}', itemName + '-' + itemCount);
+    // create delete button
+    childElement = childElement.replace('{{delete-remote-btn}}', 'delete-remote-item-' + itemCount);
+    // map the delete button to the function
     childElement = childElement.replace('deleteRemoteItem()', 'deleteRemoteItem(\'' + childId + '\')');
     console.log(childElement);
     childElement = remoteItemsContainer.innerHTML + childElement;
