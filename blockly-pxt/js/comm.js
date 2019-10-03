@@ -72,6 +72,14 @@ function show_settings(){
     });
 }
 
+function popError(msg){
+    $('#error-msg').html(msg);
+
+    $('#errorModal').modal({
+        'show': true
+    });
+}
+
 function sendPassword(){
     $('#repl-password').val('');
     $('#passwordModal').on('shown.bs.modal', function () {

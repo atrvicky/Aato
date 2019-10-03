@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="./css/bootstrap.min.css">
 
-  <title>Aato Blockly:Alpha-1</title>
+  <title>Aato Blockly:Alpha-2</title>
 
   <script src="js/popper.min.js"></script>
   <script src="js/blockly_compressed.js"></script>
@@ -39,16 +39,24 @@
       </div>
       <div class="col-xs-2" style="align-self: center; text-align: end">
         <div id="buttons" style="margin: auto 16px">
-          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i class="fas fa-link"
-              id="connect-fav"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"><i class="fas fa-cloud-upload-alt"
-              id="upload-fav"></i> Upload</button>
+          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i
+              class="fas fa-link" id="connect-fav"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"><i
+              class="fas fa-cloud-upload-alt" id="upload-fav"></i> Upload</button>
+          <button type="button" class="btn btn-light btn-sm" id="play-btn" onclick="remoteMode()"><i
+              class="fas fa-play-circle" id="play-fav"></i> Play</button>
           <p id="file-status"
             style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
-          <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="show_settings()"><i class="fas fa-cog"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="help-btn" style="display: none"><i class="fas fa-question-circle"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="show-console-btn" style="display: none"><i class="fas fa-terminal"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="show-code-btn"><i class="fas fa-code" id="show-code-fav"></i> Code</button>
+          <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="show_settings()"><i
+              class="fas fa-cog"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="help-btn" style="display: none"><i
+              class="fas fa-question-circle"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="show-console-btn" style="display: none"><i
+              class="fas fa-terminal"></i></button>
+          <button type="button" class="btn btn-light btn-sm" id="show-code-btn"><i class="fas fa-code"
+              id="show-code-fav"></i> Code</button>
+          <button type="button" class="btn btn-light btn-sm" id="show-remote-btn"><i class="fas fa-gamepad"
+              id="show-remote-fav" disabled onclick="initiateRemoteMode()"></i></button>
         </div>
       </div>
     </div>
@@ -74,8 +82,52 @@
         </div>
       </div>
       <div class="col-md-0" id="code-div" style="display: none; height: 100%">
-        <div id="code-div-container"style="display: block; height: 98%">
+        <div id="code-div-container" style="display: block; height: 98%">
 
+        </div>
+      </div>
+      <div class="col-md-0" id="remote-div" style="display: none; height: 100%">
+        <div id="remote-div-container" style="display: block; height: 98%">
+          <div class="container" style="height: 100%">
+            <div class="row align-items-center" id="no-item-msg-container" style="height: 85%">
+              <div class="col">
+                <small id="no-item-msg" class="text-muted"
+                  style="width: 100%; margin: 0 auto; display: block; text-align: center">You have not added any remote
+                  items! You can add upto 10 remote items by tapping the button below.</small>
+              </div>
+            </div>
+            <div class="" id="remote-item-list-container" style="height: 85%; overflow: auto; margin-bottom: 8px;">
+              <!-- put the added remote items here -->
+
+
+
+            </div>
+            <div class="row align-items-end">
+              <div class="col">
+                <button id="add-remote-item-btn" type="button" class="btn btn-primary" style="width: 100%"><i
+                    class="fas fa-gamepad"></i> Add Remote items</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- template for the remote list -->
+  <div style="display: none" id="remote-template">
+    <div class="remote-list-item align-items-center" id="{{added-item-id}}">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-sm-4">
+            <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img">
+          </div>
+          <div class="col-sm-8">
+            <p class="added-remote-item-1-name">{{item-name}}</p>
+            <button class="btn btn-sm btn-danger" id="{{delete-remote-btn}}" onclick="deleteRemoteItem()"><i
+                class="fas fa-trash"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -97,7 +149,7 @@
           <input type="password" class="form-control" id="repl-password">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="conenct()">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="connect()">Close</button>
           <button type="button" class="btn btn-primary" id="password-submit-btn"
             onclick="parse_send_password()">Submit</button>
         </div>
@@ -128,6 +180,74 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- error modal -->
+  <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-exclamation-triangle" style="margin: auto 16px auto 4px; align-self: center;"></i>
+          <h5 class="modal-title" id="settingsModalCenterTitle">Error!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="error-msg">
+          Something went wrong!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add remote item modal -->
+  <div class="modal fade" id="remoteShowcaseModal" tabindex="-1" role="dialog"
+    aria-labelledby="remoteShowcaseModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="remoteShowcaseModalTitle"><i class="fas fa-gamepad"></i> Remote items</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+
+              <!-- item 1 layout begin -->
+              <div class="col-md-3">
+                <div class="remote-item-wrapper text-center">
+                  <img src="./images/joystick.png" alt="Joystick Controller" class="img-thumbnail">
+                  <p class="showcase-item-title">Joystick</p>
+                  <button id="add-joystick-btn" type="button" class="btn btn-primary add-item-btn"
+                    style="width: 100%"><i class="fas fa-plus"></i></button>
+                </div>
+              </div>
+              <!-- item 1 layout ends -->
+
+              <!-- item layout begin -->
+              <div class="col-md-3">
+                <div class="remote-item-wrapper text-center">
+                  <img src="./images/slider.png" alt="Slider Controller" class="img-thumbnail">
+                  <p class="showcase-item-title">Linear Slider</p>
+                  <button id="add-slider-btn" type="button" class="btn btn-primary add-item-btn" style="width: 100%"><i
+                      class="fas fa-plus"></i></button>
+                </div>
+              </div>
+              <!-- item layout ends -->
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <small id="no-item-msg" class="text-muted"
+            style="width: 100%; margin: 0 auto; display: block; text-align: center">You can add <span
+              id="remote-items-available">10</span> more remote items.</small>
         </div>
       </div>
     </div>
@@ -587,6 +707,7 @@
   <script src="./js/injector.js"></script>
   <script src="./js/bootstrap.bundle.min.js"></script>
   <script src="./js/comm.js"></script>
+  <script src="./js/remote.js"></script>
 
   <script>
     onresize();
@@ -636,7 +757,7 @@
 
   </script>
 
-<script src="./monaco-editor/min/vs/loader.js"></script>
+  <script src="./monaco-editor/min/vs/loader.js"></script>
 
 </body>
 

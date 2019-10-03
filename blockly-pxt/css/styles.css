@@ -34,3 +34,25 @@ html, body {
     padding-left: 4px !important;
     cursor: pointer;
   }
+
+  .remote-item-wrapper{
+    border: 0.5px solid #0807084a;
+    border-radius: 5px;
+    padding: 4px;
+    margin-bottom: 4px;
+    width: 100px;
+    height: auto;
+  }
+
+  .remote-list-item{
+    margin: 8px auto;
+    height: 100px;    
+    width: 100%;
+    border: 0.5px solid #0807084a;
+    border-radius: 5px;
+    display: flex;
+  }
+
+  .added-remote-item-name{
+    margin-bottom: 0px;
+  }
