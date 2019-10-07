@@ -14,12 +14,11 @@ html, body {
   #show-code-btn, #upload-btn{
     margin-left: 4px;
   }
-  #main-wrapper{
+
+  #blocklyArea, #remote-builder-wrapper, #main-wrapper, .max-height {
     height: 100%;
   }
-  #blocklyArea {
-    height: 100%;
-  }
+
   #code-div{
     box-shadow: -3px 7px 7px -5px #080708;
     overflow: auto;
@@ -65,3 +64,29 @@ html, body {
   .error-modal-header .close{
     color: white;
   }
+
+  #added-remote-showcase{
+    box-shadow: rgb(8, 7, 8) 5px 0px 10px -10px;
+  }
+
+  #added-remote-item-list-container{
+    padding: 16px;
+  }
+
+  .remote-builder{
+    position: relative;
+  }
+
+  /* #joystick {
+    height: 300px;
+    width: 300px;
+    border-radius: 300px;
+    -moz-border-radius: 300px;
+    -webkit-border-radius: 300px;
+    text-align: center;
+    background-color: #80d5ff;
+    font: 24px/300px Helvetica, Arial, sans-serif;
+    cursor: all-scroll;
+    user-select: none;
+    z-index: -100;
+  } */

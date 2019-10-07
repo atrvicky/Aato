@@ -3,761 +3,804 @@
 <html>
 
 <head>
-  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
 
-  <title>Aato Blockly:Alpha-2</title>
+    <title>Aato Blockly:Alpha-2</title>
 
-  <script src="js/popper.min.js"></script>
-  <script src="js/blockly_compressed.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/blockly_compressed.js"></script>
 
-  <!-- the js needed to code and blocks -->
-  <script src="generators/javascript_compressed.js"></script>
-  <script src="generators/python_compressed.js"></script>
-  <script src="js/blocks_compressed.js"></script>
-  <script src="js/blocks_custom.js"></script>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-ui.min.js"></script>
+    <!-- the js needed to code and blocks -->
+    <script src="generators/javascript_compressed.js"></script>
+    <script src="generators/python_compressed.js"></script>
+    <script src="js/blocks_compressed.js"></script>
+    <script src="js/blocks_custom.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
 
-  <!-- include the custom blocks from json -->
-  <script src="generators/gen_custom_js.js"></script>
-  <script src="generators/gen_custom_py.js"></script>
-  <script src="msg/js/en.js"></script>
-  <script src="./js/FileSaver.js"></script>
-  <!-- <script src="js/toolbox.js"></script> -->
-  <link rel="stylesheet" href="./css/styles.css">
-  <script defer src="./js/icons.min.js"></script>
+    <!-- include the custom blocks from json -->
+    <script src="generators/gen_custom_js.js"></script>
+    <script src="generators/gen_custom_py.js"></script>
+    <script src="msg/js/en.js"></script>
+    <script src="./js/FileSaver.js"></script>
+    <!-- <script src="js/toolbox.js"></script> -->
+    <link rel="stylesheet" href="./css/styles.css">
+    <script defer src="./js/icons.min.js"></script>
 </head>
 
 <body>
-  <div class="container-fluid" id="main-wrapper">
-    <div class="row justify-content-between"
-      style="height: 48px; text-align: center-vertical; position: relative; z-index: 1000; box-shadow: 0px 0px 5px 0px #080708;">
-      <div class="col-xs-2" style="align-self: center">
-        <h2 style="margin: auto 16px;">Aato</h2>
-      </div>
-      <div class="col-xs-2" style="align-self: center; text-align: end">
-        <div id="buttons" style="margin: auto 16px">
-          <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i
-              class="fas fa-link" id="connect-fav"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"><i
-              class="fas fa-cloud-upload-alt" id="upload-fav"></i> Upload</button>
-          <button type="button" class="btn btn-light btn-sm" id="play-btn" onclick="remoteMode()"><i
-              class="fas fa-play-circle" id="play-fav"></i> Play</button>
-          <p id="file-status"
-            style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none"></p>
-          <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="show_settings()"><i
-              class="fas fa-cog"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="help-btn" style="display: none"><i
-              class="fas fa-question-circle"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="show-console-btn" style="display: none"><i
-              class="fas fa-terminal"></i></button>
-          <button type="button" class="btn btn-light btn-sm" id="show-code-btn"><i class="fas fa-code"
-              id="show-code-fav"></i> Code</button>
-          <button type="button" class="btn btn-light btn-sm" id="show-remote-btn"><i class="fas fa-gamepad"
-              id="show-remote-fav" disabled onclick="initiateRemoteMode()"></i></button>
-        </div>
-      </div>
-    </div>
-    <div class="row" style="height: 100%">
-      <div class="col-md-12" id="blocklyArea">
-        <div id="blocklyDiv" style="position: absolute">
-
-        </div>
-        <div id="toast-wrapper" style="position:absolute; bottom:70px; right:10px">
-          <!-- Then put toasts within -->
-          <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-              <strong class="mr-auto">Connection Update</strong>
-              <!-- <small class="text-muted">just now</small> -->
-              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+    <div class="container-fluid" id="main-wrapper">
+        <div class="row justify-content-between"
+            style="height: 48px; text-align: center-vertical; position: relative; z-index: 1000; box-shadow: 0px 0px 5px 0px #080708;">
+            <div class="col-xs-2" style="align-self: center">
+                <h2 style="margin: auto 16px;">Aato</h2>
             </div>
-            <div class="toast-body" style="min-width: 300px">
-              Toast body.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-0" id="code-div" style="display: none; height: 100%">
-        <div id="code-div-container" style="display: block; height: 98%">
-
-        </div>
-      </div>
-      <div class="col-md-0" id="remote-div" style="display: none; height: 100%">
-        <div id="remote-div-container" style="display: block; height: 98%">
-          <div class="container" style="height: 100%">
-            <div class="row align-items-center" id="no-item-msg-container" style="height: 85%">
-              <div class="col">
-                <small id="no-item-msg" class="text-muted"
-                  style="width: 100%; margin: 0 auto; display: block; text-align: center">You have not added any remote
-                  items! You can add upto 10 remote items by tapping the button below.</small>
-              </div>
-            </div>
-            <div class="" id="remote-item-list-container" style="height: 85%; overflow: auto; margin-bottom: 8px;">
-              <!-- put the added remote items here -->
-
-
-
-            </div>
-            <div class="row align-items-end">
-              <div class="col">
-                <button id="add-remote-item-btn" type="button" class="btn btn-primary" style="width: 100%"><i
-                    class="fas fa-gamepad"></i> Add Remote items</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- template for the remote list -->
-  <div style="display: none" id="remote-template">
-    <div class="remote-list-item align-items-center" id="{{added-item-id}}">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-sm-4">
-            <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img">
-          </div>
-          <div class="col-sm-8">
-            <p class="added-remote-item-1-name">{{item-name}}</p>
-            <button class="btn btn-sm btn-danger" id="{{delete-remote-btn}}" onclick="deleteRemoteItem()"><i
-                class="fas fa-trash"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Enter Password modal -->
-  <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="passwordModalCenterTitle">Enter Password</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Enter the 4-digit pin</p>
-          <input type="password" class="form-control" id="repl-password">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="connect()">Close</button>
-          <button type="button" class="btn btn-primary" id="password-submit-btn"
-            onclick="parse_send_password()">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Settings modal -->
-  <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <i class="fas fa-cog" style="margin: auto 16px auto 4px; align-self: center;"></i>
-          <h5 class="modal-title" id="settingsModalCenterTitle">Aato Settings</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="instant-upload-switch">
-            <label class="custom-control-label" for="instant-upload-switch">Instant Upload</label>
-            <small data-toggle="tooltip" data-placement="right" title="Uploads instantly on dropping a block">
-              <i class="fas fa-info-circle"></i>
-            </small>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- error modal -->
-  <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header error-modal-header">
-          <i class="fas fa-exclamation-triangle" style="margin: auto 16px auto 4px; align-self: center;"></i>
-          <h5 class="modal-title" id="settingsModalCenterTitle">Error!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="error-msg">
-          Something went wrong!
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add remote item modal -->
-  <div class="modal fade" id="remoteShowcaseModal" tabindex="-1" role="dialog"
-    aria-labelledby="remoteShowcaseModalTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="remoteShowcaseModalTitle"><i class="fas fa-gamepad"></i> Remote items</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row">
-
-              <!-- item 1 layout begin -->
-              <div class="col-md-3">
-                <div class="remote-item-wrapper text-center">
-                  <img src="./images/joystick.png" alt="Joystick Controller" class="img-thumbnail">
-                  <p class="showcase-item-title">Joystick</p>
-                  <button id="add-joystick-btn" type="button" class="btn btn-primary add-item-btn"
-                    style="width: 100%"><i class="fas fa-plus"></i></button>
+            <div class="col-xs-2" style="align-self: center; text-align: end">
+                <div id="buttons" style="margin: auto 16px">
+                    <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i
+                            class="fas fa-link" id="connect-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"><i
+                            class="fas fa-cloud-upload-alt" id="upload-fav"></i> Upload</button>
+                    <button type="button" class="btn btn-light btn-sm" id="play-btn" onclick="showRemoteBuilder()"><i
+                            class="fas fa-play-circle" id="play-fav"></i> Play</button>
+                    <p id="file-status"
+                        style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none">
+                    </p>
+                    <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="show_settings()"><i
+                            class="fas fa-cog"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="help-btn" style="display: none"><i
+                            class="fas fa-question-circle"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="show-console-btn" style="display: none"><i
+                            class="fas fa-terminal"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="show-code-btn"><i class="fas fa-code"
+                            id="show-code-fav"></i> Code</button>
+                    <button type="button" class="btn btn-light btn-sm" id="show-remote-btn"
+                        onclick="initiateRemoteMode()"><i class="fas fa-gamepad" id="show-remote-fav"
+                            disabled></i></button>
                 </div>
-              </div>
-              <!-- item 1 layout ends -->
-
-              <!-- item layout begin -->
-              <div class="col-md-3">
-                <div class="remote-item-wrapper text-center">
-                  <img src="./images/slider.png" alt="Slider Controller" class="img-thumbnail">
-                  <p class="showcase-item-title">Linear Slider</p>
-                  <button id="add-slider-btn" type="button" class="btn btn-primary add-item-btn" style="width: 100%"><i
-                      class="fas fa-plus"></i></button>
-                </div>
-              </div>
-              <!-- item layout ends -->
-
             </div>
-          </div>
         </div>
-        <div class="modal-footer">
-          <small id="no-item-msg" class="text-muted"
-            style="width: 100%; margin: 0 auto; display: block; text-align: center">You can add <span
-              id="remote-items-available">10</span> more remote items.</small>
+        <div class="row" style="height: 100%">
+            <div class="col-md-12" id="blocklyArea">
+                <div id="blocklyDiv" style="position: absolute">
+
+                </div>
+                <div id="toast-wrapper" style="position:absolute; bottom:70px; right:10px">
+                    <!-- Then put toasts within -->
+                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="mr-auto">Connection Update</strong>
+                            <!-- <small class="text-muted">just now</small> -->
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body" style="min-width: 300px">
+                            Toast body.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Remote Builder Begin -->
+            <div id="remote-builder-wrapper" class="max-height" style="display: none;">
+                <div class="container-fluid max-height">
+                    <div class="row max-height">
+                        <div class="col-sm-2 max-height" id="added-remote-showcase" style="margin-left: -15px;">
+                            <div class="" id="added-remote-item-list-container" style="height:85%; overflow: auto;">
+                                <!-- put the added (draggable) remote items here -->
+
+                            </div>
+                        </div>
+                        <div class="col-sm-10 height-85" id="remote-builder">
+                            <div class="remote-workspace-wrapper max-height" style="position: relative;">
+                                <!-- the dragged items are dropped here -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Remote Builder End -->
+            <div class="col-md-0" id="code-div" style="display: none; height: 100%">
+                <div id="code-div-container" style="display: block; height: 98%">
+
+                </div>
+            </div>
+            <div class="col-md-0" id="remote-div" style="display: none; height: 100%">
+                <div id="remote-div-container" style="display: block; height: 98%">
+                    <div class="container" style="height: 100%">
+                        <div class="row align-items-center" id="no-item-msg-container" style="height: 85%">
+                            <div class="col">
+                                <small id="no-item-msg" class="text-muted"
+                                    style="width: 100%; margin: 0 auto; display: block; text-align: center">You have not
+                                    added any remote
+                                    items! You can add upto 10 remote items by tapping the button below.</small>
+                            </div>
+                        </div>
+                        <div class="" id="remote-item-list-container"
+                            style="height: 85%; overflow: auto; margin-bottom: 8px;">
+                            <!-- put the added remote items here -->
+
+
+
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col">
+                                <button id="add-remote-item-btn" type="button" class="btn btn-primary"
+                                    style="width: 100%"><i class="fas fa-gamepad"></i> Add Remote items</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <!-- the custom workspace should be loaded here -->
-  <xml id="workspaceBlocks" style="display:none">
-    <!-- <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="150" y="100"/> -->
-  </xml>
 
-  <!-- the custom toolbox should be loaded here -->
-  <!-- https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#juod54 -->
-  <xml id="toolbox" style="display: none">
-    <category name="Logic" colour="#5b80a5">
-      <block type="controls_if"></block>
-      <block type="logic_compare">
-        <field name="OP">EQ</field>
-      </block>
-      <block type="logic_operation">
-        <field name="OP">AND</field>
-      </block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean">
-        <field name="BOOL">TRUE</field>
-      </block>
-      <block type="logic_null"></block>
-      <block type="logic_ternary"></block>
-    </category>
-    <category name="Loops" colour="#5ba55b">
-      <block type="on_start"></block>
-      <block type="forever"></block>
-      <block type="controls_repeat_ext">
-        <value name="TIMES">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="controls_whileUntil">
-        <field name="MODE">WHILE</field>
-      </block>
-      <block type="controls_for">
-        <field name="VAR" id="$zav,g$m}6HC}R(u[?Nj">i</field>
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-        <value name="BY">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="controls_forEach">
-        <field name="VAR" id="wlkA-_dUMF09mHiCp41p">j</field>
-      </block>
-      <block type="controls_flow_statements" disabled="true">
-        <field name="FLOW">BREAK</field>
-      </block>
-    </category>
-    <category name="Math" colour="#5b67a5">
-      <block type="math_number">
-        <field name="NUM">0</field>
-      </block>
-      <block type="math_arithmetic">
-        <field name="OP">ADD</field>
-        <value name="A">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="B">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_single">
-        <field name="OP">ROOT</field>
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">9</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_trig">
-        <field name="OP">SIN</field>
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">45</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_constant">
-        <field name="CONSTANT">PI</field>
-      </block>
-      <block type="math_number_property">
-        <mutation divisor_input="false"></mutation>
-        <field name="PROPERTY">EVEN</field>
-        <value name="NUMBER_TO_CHECK">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_round">
-        <field name="OP">ROUND</field>
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">3.1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_on_list">
-        <mutation op="SUM"></mutation>
-        <field name="OP">SUM</field>
-      </block>
-      <block type="math_modulo">
-        <value name="DIVIDEND">
-          <shadow type="math_number">
-            <field name="NUM">64</field>
-          </shadow>
-        </value>
-        <value name="DIVISOR">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_constrain">
-        <value name="VALUE">
-          <shadow type="math_number">
-            <field name="NUM">50</field>
-          </shadow>
-        </value>
-        <value name="LOW">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="HIGH">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_float"></block>
-    </category>
-    <category name="Text" colour="#5ba58c">
-      <block type="text">
-        <field name="TEXT"></field>
-      </block>
-      <block type="text_join">
-        <mutation items="2"></mutation>
-      </block>
-      <block type="text_append">
-        <field name="VAR" id="y1V3QPfX2cgwtFc{();9">item</field>
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT"></field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_length">
-        <value name="VALUE">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_isEmpty">
-        <value name="VALUE">
-          <shadow type="text">
-            <field name="TEXT"></field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_indexOf">
-        <field name="END">FIRST</field>
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
-          </block>
-        </value>
-        <value name="FIND">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_charAt">
-        <mutation at="true"></mutation>
-        <field name="WHERE">FROM_START</field>
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_getSubstring">
-        <mutation at1="true" at2="true"></mutation>
-        <field name="WHERE1">FROM_START</field>
-        <field name="WHERE2">FROM_START</field>
-        <value name="STRING">
-          <block type="variables_get">
-            <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_changeCase">
-        <field name="CASE">UPPERCASE</field>
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_trim">
-        <field name="MODE">BOTH</field>
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_print">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_prompt_ext">
-        <mutation type="TEXT"></mutation>
-        <field name="TYPE">TEXT</field>
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-    </category>
-    <category name="Lists" colour="#745ba5">
-      <block type="lists_create_with">
-        <mutation items="0"></mutation>
-      </block>
-      <block type="lists_create_with">
-        <mutation items="3"></mutation>
-      </block>
-      <block type="lists_repeat">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">5</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lists_length"></block>
-      <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf">
-        <field name="END">FIRST</field>
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getIndex">
-        <mutation statement="false" at="true"></mutation>
-        <field name="MODE">GET</field>
-        <field name="WHERE">FROM_START</field>
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_setIndex">
-        <mutation at="true"></mutation>
-        <field name="MODE">SET</field>
-        <field name="WHERE">FROM_START</field>
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getSublist">
-        <mutation at1="true" at2="true"></mutation>
-        <field name="WHERE1">FROM_START</field>
-        <field name="WHERE2">FROM_START</field>
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_split">
-        <mutation mode="SPLIT"></mutation>
-        <field name="MODE">SPLIT</field>
-        <value name="DELIM">
-          <shadow type="text">
-            <field name="TEXT">,</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lists_sort">
-        <field name="TYPE">NUMERIC</field>
-        <field name="DIRECTION">1</field>
-      </block>
-    </category>
-    <sep></sep>
-    <category name="Lights" colour="#9fa55b">
-      <block type="csl_led_toggle">
-        <field name="NAME">1</field>
-      </block>
-      <block type="led_on">
-        <field name="led_choice">1</field>
-        <field name="led_lux">100</field>
-      </block>
-      <block type="led_all_on">
-        <field name="led_lux">100</field>
-      </block>
-      <block type="led_off">
-        <field name="led_choice">1</field>
-      </block>
-      <block type="led_all_off"></block>
-      <block type="led_blink">
-        <field name="led_choice">1</field>
-        <field name="led_lux">100</field>
-        <field name="led_time">0.5</field>
-      </block>
-      <block type="led_fade">
-        <field name="led_choice">1</field>
-        <field name="led_lux">100</field>
-      </block>
-    </category>
-    <category name="Motors" colour="#745ba5">
-      <block type="run_motor">
-        <field name="motor_choice">1</field>
-        <field name="motor_speed">100</field>
-      </block>
-      <block type="brake_motor">
-        <field name="motor_choice">1</field>
-      </block>
-      <block type="brake_all_motor"></block>
-      <block type="servo_angle">
-        <field name="gpio_choice">0</field>
-        <value name="NAME">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="servo_release">
-        <field name="gpio_choice">0</field>
-      </block>
-      <block type="servo_get_angle">
-        <field name="gpio_choice">0</field>
-      </block>
-    </category>
-    <category name="Sensors" colour="#995ba5">
-      <block type="read_ir">
-        <field name="ir_choice">1</field>
-      </block>
-    </category>
-    <category name="IO" colour="#5ba58c">
-      <block type="read_gpio">
-        <field name="gpio_choice">0</field>
-      </block>
-      <block type="read_gpio_pup">
-        <field name="gpio_choice">0</field>
-      </block>
-      <block type="write_gpio">
-        <field name="gpio_choice">0</field>
-        <value name="NAME">
-          <shadow type="gpio_on">
-            <field name="gpio_choice">1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="toggle_gpio">
-        <field name="gpio_choice">0</field>
-      </block>
-      <block type="gpio_state_listener">
-        <field name="gpio_choice">0</field>
-      </block>
-    </category>
-    <category name="Timers" colour="#a55b80">
-      <block type="timer_wait">
-        <field name="wait_val">1</field>
-      </block>
-    </category>
-    <category name="Display" colour="#a5745b">
-      <block type="lcd_home"></block>
-      <block type="lcd_clear"></block>
-      <block type="lcd_set">
-        <field name="lcd_row">1</field>
-        <field name="lcd_col">1</field>
-      </block>
-      <block type="lcd_display">
-        <field name="NAME">True</field>
-      </block>
-      <block type="lcd_cursor">
-        <field name="NAME">True</field>
-      </block>
-      <block type="lcd_blink">
-        <field name="NAME">True</field>
-      </block>
-      <block type="lcd_backlight">
-        <field name="NAME">True</field>
-      </block>
-      <block type="lcd_move_left"></block>
-      <block type="lcd_move_right"></block>
-      <block type="lcd_rtl">
-        <field name="NAME">ltr</field>
-      </block>
-      <block type="lcd_autoscroll">
-        <field name="NAME">True</field>
-        <field name="scrollSpeed">100</field>
-      </block>
-      <block type="lcd_brightness">
-        <field name="NAME">100</field>
-      </block>
-      <block type="lcd_write">
-        <value name="NAME">
-          <shadow type="text">
-            <field name="TEXT">Hello, World!</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lcd_type">
-        <field name="NAME">False</field>
-      </block>
-    </category>
-    <sep></sep>
-    <category name="Variables" colour="#ff2400" custom="VARIABLE"></category>
-  </xml>
+    <!-- template for the remote list -->
+    <div style="display: none" id="remote-template">
+        <div class="remote-list-item align-items-center" id="{{added-item-id}}">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-sm-4">
+                        <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img">
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="added-remote-item-1-name">{{item-name}}</p>
+                        <button class="btn btn-sm btn-danger" id="{{delete-remote-btn}}" onclick="deleteRemoteItem()"><i
+                                class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script src="./js/injector.js"></script>
-  <script src="./js/bootstrap.bundle.min.js"></script>
-  <script src="./js/comm.js"></script>
-  <script src="./js/remote.js"></script>
+    <!-- template for the added remote list. It is from here, user will drag the item to the workspace -->
+    <div style="display: none" id="added-remote-template">
+        <div>
+            <div class="align-items-center text-center added-remote-item" id="{{added-item-id}}" draggable="true">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img"
+                            style="max-width: 100px;" draggable="false">
+                    </div>
+                    <div class="col-sm-12">
+                        <p class="added-remote-item-1-name" draggable="false">{{item-name}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    onresize();
-    // custom button
-    let showCode = document.getElementById("show-code-btn");
-    let showCodeFav = document.getElementById("show-code-fav");
-    showCode.onclick = () => {
-      let codeDiv = document.getElementById("code-div");
-      codeDivDisplay = codeDiv.style.display;
-      codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
-      blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
-      showCode.className = codeDivDisplay === "none" ? "btn btn-dark" : "btn btn-light";
-      blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
-      codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
-      codeDiv.style.boxShadow = codeDivDisplay === "none" && window.innerWidth < 720 ? "0px -7px 10px -10px #080708" : "-7px 0px 10px -10px #080708";
-      codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
-      onresize();
-      createEditor();
-    };
-  </script>
+    <!-- Enter Password modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalCenterTitle">Enter Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Enter the 4-digit pin</p>
+                    <input type="password" class="form-control" id="repl-password">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        onclick="connect()">Close</button>
+                    <button type="button" class="btn btn-primary" id="password-submit-btn"
+                        onclick="parse_send_password()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script>
+    <!-- Settings modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="fas fa-cog" style="margin: auto 16px auto 4px; align-self: center;"></i>
+                    <h5 class="modal-title" id="settingsModalCenterTitle">Aato Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="instant-upload-switch">
+                        <label class="custom-control-label" for="instant-upload-switch">Instant Upload</label>
+                        <small data-toggle="tooltip" data-placement="right"
+                            title="Uploads instantly on dropping a block">
+                            <i class="fas fa-info-circle"></i>
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // a variable to hold the timeout functions
-    let timeOut;
+    <!-- error modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header error-modal-header">
+                    <i class="fas fa-exclamation-triangle" style="margin: auto 16px auto 4px; align-self: center;"></i>
+                    <h5 class="modal-title" id="settingsModalCenterTitle">Error!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="error-msg">
+                    Something went wrong!
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // script to debug the blocks
-    function onDropBlock(event) {
-      clearTimeout(timeOut);
-      if ((event.type == Blockly.Events.BLOCK_DELETE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
-        //console.log(Blockly.JavaScript.workspaceToCode(workspace));
-        let pyCode = Blockly.Python.workspaceToCode(workspace);
-        // console.log(pyCode);
-        let code = document.getElementById("code");
-        // code.innerText = pyCode;
-        updateCode(pyCode);
+    <!-- Add remote item modal -->
+    <div class="modal fade" id="remoteShowcaseModal" tabindex="-1" role="dialog"
+        aria-labelledby="remoteShowcaseModalTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="remoteShowcaseModalTitle"><i class="fas fa-gamepad"></i> Remote items
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
 
-        if (instantUpload) {
-          timeOut = setTimeout(() => {
-            console.log("Sending to console");
-            sendData(pyCode);
-          }, 500);
+                            <!-- item 1 layout begin -->
+                            <div class="col-md-3">
+                                <div class="remote-item-wrapper text-center">
+                                    <img src="./images/joystick.png" alt="Joystick Controller" class="img-thumbnail">
+                                    <p class="showcase-item-title">Joystick</p>
+                                    <button id="add-joystick-btn" type="button" class="btn btn-primary add-item-btn"
+                                        style="width: 100%"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <!-- item 1 layout ends -->
+
+                            <!-- item layout begin -->
+                            <div class="col-md-3">
+                                <div class="remote-item-wrapper text-center">
+                                    <img src="./images/slider.png" alt="Slider Controller" class="img-thumbnail">
+                                    <p class="showcase-item-title">Linear Slider</p>
+                                    <button id="add-slider-btn" type="button" class="btn btn-primary add-item-btn"
+                                        style="width: 100%"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <!-- item layout ends -->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <small id="no-item-msg" class="text-muted"
+                        style="width: 100%; margin: 0 auto; display: block; text-align: center">You can add <span
+                            id="remote-items-available">10</span> more remote items.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- the custom workspace should be loaded here -->
+    <xml id="workspaceBlocks" style="display:none">
+        <!-- <block type="on_start" id="%o=Vt4G1Y^6A]Xg7P,s+" x="150" y="100"/> -->
+    </xml>
+
+    <!-- the custom toolbox should be loaded here -->
+    <!-- https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#juod54 -->
+    <xml id="toolbox" style="display: none">
+        <category name="Logic" colour="#5b80a5">
+            <block type="controls_if"></block>
+            <block type="logic_compare">
+                <field name="OP">EQ</field>
+            </block>
+            <block type="logic_operation">
+                <field name="OP">AND</field>
+            </block>
+            <block type="logic_negate"></block>
+            <block type="logic_boolean">
+                <field name="BOOL">TRUE</field>
+            </block>
+            <block type="logic_null"></block>
+            <block type="logic_ternary"></block>
+        </category>
+        <category name="Loops" colour="#5ba55b">
+            <block type="on_start"></block>
+            <block type="forever"></block>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_whileUntil">
+                <field name="MODE">WHILE</field>
+            </block>
+            <block type="controls_for">
+                <field name="VAR" id="$zav,g$m}6HC}R(u[?Nj">i</field>
+                <value name="FROM">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="TO">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+                <value name="BY">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_forEach">
+                <field name="VAR" id="wlkA-_dUMF09mHiCp41p">j</field>
+            </block>
+            <block type="controls_flow_statements" disabled="true">
+                <field name="FLOW">BREAK</field>
+            </block>
+        </category>
+        <category name="Math" colour="#5b67a5">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+            <block type="math_arithmetic">
+                <field name="OP">ADD</field>
+                <value name="A">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="B">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_single">
+                <field name="OP">ROOT</field>
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">9</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_trig">
+                <field name="OP">SIN</field>
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">45</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_constant">
+                <field name="CONSTANT">PI</field>
+            </block>
+            <block type="math_number_property">
+                <mutation divisor_input="false"></mutation>
+                <field name="PROPERTY">EVEN</field>
+                <value name="NUMBER_TO_CHECK">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_round">
+                <field name="OP">ROUND</field>
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">3.1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_on_list">
+                <mutation op="SUM"></mutation>
+                <field name="OP">SUM</field>
+            </block>
+            <block type="math_modulo">
+                <value name="DIVIDEND">
+                    <shadow type="math_number">
+                        <field name="NUM">64</field>
+                    </shadow>
+                </value>
+                <value name="DIVISOR">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_constrain">
+                <value name="VALUE">
+                    <shadow type="math_number">
+                        <field name="NUM">50</field>
+                    </shadow>
+                </value>
+                <value name="LOW">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="HIGH">
+                    <shadow type="math_number">
+                        <field name="NUM">100</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_random_int">
+                <value name="FROM">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="TO">
+                    <shadow type="math_number">
+                        <field name="NUM">100</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="math_random_float"></block>
+        </category>
+        <category name="Text" colour="#5ba58c">
+            <block type="text">
+                <field name="TEXT"></field>
+            </block>
+            <block type="text_join">
+                <mutation items="2"></mutation>
+            </block>
+            <block type="text_append">
+                <field name="VAR" id="y1V3QPfX2cgwtFc{();9">item</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT"></field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_length">
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_isEmpty">
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT"></field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_indexOf">
+                <field name="END">FIRST</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
+                    </block>
+                </value>
+                <value name="FIND">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_charAt">
+                <mutation at="true"></mutation>
+                <field name="WHERE">FROM_START</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
+                    </block>
+                </value>
+            </block>
+            <block type="text_getSubstring">
+                <mutation at1="true" at2="true"></mutation>
+                <field name="WHERE1">FROM_START</field>
+                <field name="WHERE2">FROM_START</field>
+                <value name="STRING">
+                    <block type="variables_get">
+                        <field name="VAR" id="6N=BTngW^R+nT~Maqg#A">text</field>
+                    </block>
+                </value>
+            </block>
+            <block type="text_changeCase">
+                <field name="CASE">UPPERCASE</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_trim">
+                <field name="MODE">BOTH</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_print">
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="text_prompt_ext">
+                <mutation type="TEXT"></mutation>
+                <field name="TYPE">TEXT</field>
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+            </block>
+        </category>
+        <category name="Lists" colour="#745ba5">
+            <block type="lists_create_with">
+                <mutation items="0"></mutation>
+            </block>
+            <block type="lists_create_with">
+                <mutation items="3"></mutation>
+            </block>
+            <block type="lists_repeat">
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM">5</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="lists_length"></block>
+            <block type="lists_isEmpty"></block>
+            <block type="lists_indexOf">
+                <field name="END">FIRST</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_getIndex">
+                <mutation statement="false" at="true"></mutation>
+                <field name="MODE">GET</field>
+                <field name="WHERE">FROM_START</field>
+                <value name="VALUE">
+                    <block type="variables_get">
+                        <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_setIndex">
+                <mutation at="true"></mutation>
+                <field name="MODE">SET</field>
+                <field name="WHERE">FROM_START</field>
+                <value name="LIST">
+                    <block type="variables_get">
+                        <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_getSublist">
+                <mutation at1="true" at2="true"></mutation>
+                <field name="WHERE1">FROM_START</field>
+                <field name="WHERE2">FROM_START</field>
+                <value name="LIST">
+                    <block type="variables_get">
+                        <field name="VAR" id="Sb8rkx0,R1#MLvSMEoz}">list</field>
+                    </block>
+                </value>
+            </block>
+            <block type="lists_split">
+                <mutation mode="SPLIT"></mutation>
+                <field name="MODE">SPLIT</field>
+                <value name="DELIM">
+                    <shadow type="text">
+                        <field name="TEXT">,</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="lists_sort">
+                <field name="TYPE">NUMERIC</field>
+                <field name="DIRECTION">1</field>
+            </block>
+        </category>
+        <sep></sep>
+        <category name="Lights" colour="#9fa55b">
+            <block type="csl_led_toggle">
+                <field name="NAME">1</field>
+            </block>
+            <block type="led_on">
+                <field name="led_choice">1</field>
+                <field name="led_lux">100</field>
+            </block>
+            <block type="led_all_on">
+                <field name="led_lux">100</field>
+            </block>
+            <block type="led_off">
+                <field name="led_choice">1</field>
+            </block>
+            <block type="led_all_off"></block>
+            <block type="led_blink">
+                <field name="led_choice">1</field>
+                <field name="led_lux">100</field>
+                <field name="led_time">0.5</field>
+            </block>
+            <block type="led_fade">
+                <field name="led_choice">1</field>
+                <field name="led_lux">100</field>
+            </block>
+        </category>
+        <category name="Motors" colour="#745ba5">
+            <block type="run_motor">
+                <field name="motor_choice">1</field>
+                <field name="motor_speed">100</field>
+            </block>
+            <block type="brake_motor">
+                <field name="motor_choice">1</field>
+            </block>
+            <block type="brake_all_motor"></block>
+            <block type="servo_angle">
+                <field name="gpio_choice">0</field>
+                <value name="NAME">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="servo_release">
+                <field name="gpio_choice">0</field>
+            </block>
+            <block type="servo_get_angle">
+                <field name="gpio_choice">0</field>
+            </block>
+        </category>
+        <category name="Sensors" colour="#995ba5">
+            <block type="read_ir">
+                <field name="ir_choice">1</field>
+            </block>
+        </category>
+        <category name="IO" colour="#5ba58c">
+            <block type="read_gpio">
+                <field name="gpio_choice">0</field>
+            </block>
+            <block type="read_gpio_pup">
+                <field name="gpio_choice">0</field>
+            </block>
+            <block type="write_gpio">
+                <field name="gpio_choice">0</field>
+                <value name="NAME">
+                    <shadow type="gpio_on">
+                        <field name="gpio_choice">1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="toggle_gpio">
+                <field name="gpio_choice">0</field>
+            </block>
+            <block type="gpio_state_listener">
+                <field name="gpio_choice">0</field>
+            </block>
+        </category>
+        <category name="Timers" colour="#a55b80">
+            <block type="timer_wait">
+                <field name="wait_val">1</field>
+            </block>
+        </category>
+        <category name="Display" colour="#a5745b">
+            <block type="lcd_home"></block>
+            <block type="lcd_clear"></block>
+            <block type="lcd_set">
+                <field name="lcd_row">1</field>
+                <field name="lcd_col">1</field>
+            </block>
+            <block type="lcd_display">
+                <field name="NAME">True</field>
+            </block>
+            <block type="lcd_cursor">
+                <field name="NAME">True</field>
+            </block>
+            <block type="lcd_blink">
+                <field name="NAME">True</field>
+            </block>
+            <block type="lcd_backlight">
+                <field name="NAME">True</field>
+            </block>
+            <block type="lcd_move_left"></block>
+            <block type="lcd_move_right"></block>
+            <block type="lcd_rtl">
+                <field name="NAME">ltr</field>
+            </block>
+            <block type="lcd_autoscroll">
+                <field name="NAME">True</field>
+                <field name="scrollSpeed">100</field>
+            </block>
+            <block type="lcd_brightness">
+                <field name="NAME">100</field>
+            </block>
+            <block type="lcd_write">
+                <value name="NAME">
+                    <shadow type="text">
+                        <field name="TEXT">Hello, World!</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="lcd_type">
+                <field name="NAME">False</field>
+            </block>
+        </category>
+        <sep></sep>
+        <category name="Variables" colour="#ff2400" custom="VARIABLE"></category>
+    </xml>
+
+    <script src="./js/injector.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/comm.js"></script>
+    <script src="./js/create.js"></script>
+    <script src="./js/remote.js"></script>
+
+    <script>
+        onresize();
+        // custom button
+        let showCode = document.getElementById("show-code-btn");
+        let showCodeFav = document.getElementById("show-code-fav");
+        showCode.onclick = () => {
+            let codeDiv = document.getElementById("code-div");
+            codeDivDisplay = codeDiv.style.display;
+            codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
+            blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
+            showCode.className = codeDivDisplay === "none" ? "btn btn-dark" : "btn btn-light";
+            blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
+            codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
+            codeDiv.style.boxShadow = codeDivDisplay === "none" && window.innerWidth < 720 ? "0px -7px 10px -10px #080708" : "-7px 0px 10px -10px #080708";
+            codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
+            onresize();
+            createEditor();
+        };
+    </script>
+
+    <script>
+        // a variable to hold the timeout functions
+        let timeOut;
+
+        // script to debug the blocks
+        function onDropBlock(event) {
+            clearTimeout(timeOut);
+            if ((event.type == Blockly.Events.BLOCK_DELETE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
+                //console.log(Blockly.JavaScript.workspaceToCode(workspace));
+                let pyCode = Blockly.Python.workspaceToCode(workspace);
+                // console.log(pyCode);
+                let code = document.getElementById("code");
+                // code.innerText = pyCode;
+                updateCode(pyCode);
+
+                if (instantUpload) {
+                    timeOut = setTimeout(() => {
+                        console.log("Sending to console");
+                        sendData(pyCode);
+                    }, 500);
+                }
+            }
         }
-      }
-    }
-    workspace.addChangeListener(onDropBlock);
+        workspace.addChangeListener(onDropBlock);
+    </script>
 
-  </script>
-
-  <script src="./monaco-editor/min/vs/loader.js"></script>
+    <script src="./monaco-editor/min/vs/loader.js"></script>
 
 </body>
 
