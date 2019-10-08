@@ -195,6 +195,7 @@ let drag_start = (event) => {
 let drag_over = (event) => {
     if (designMode) {
         event.preventDefault();
+        checkBoundaries(event);
         return false;
     }
 };
@@ -277,7 +278,7 @@ let drop = (event) => {
  * Create the functional instances of the remote items using the itemType
  * 
  * @param {String} itemType The item type indicator
- * @param {int} itemNo The item count for the specified item.
+ * @param {Number} itemNo The item count for the specified item.
  */
 
 let getInstance = (itemType, itemNo) => {
@@ -294,7 +295,8 @@ let getInstance = (itemType, itemNo) => {
 
 /**
  * 
- * @param {json} child Adds the childInfo json to the remoteUIs and updates the remoteCanvas
+ * Adds or updates the @param child to the @param remoteUIs array.
+ * @param {JSON} child Adds the childInfo json to the remoteUIs and updates the remoteCanvas
  */
 let addChildToArray = (child) => {
     if (remoteUIs.length > 0) {
@@ -309,6 +311,27 @@ let addChildToArray = (child) => {
     remoteUIs.push(child);
 };
 
+
+/**
+ * 
+ * Checks for overlap when items are dragged and also keeps the drag within boundary.
+ * If there are overlaps, the item is dropped to the right or left of the interface that is being overlapped.
+ * If the drop is beyond the dropZone, the item is drop at the top-left corner of the dropZone.
+ * Any overlaps even then will be handled just as stated above.
+ * 
+ * @param {DragEvent} event The dragEvent interface that contains the information about the drag
+ */
+let checkBoundaries = (event) => {
+    let eventX = event.clientX;
+    let eventY = event.clientY;
+};
+
+/**
+ * 
+ * Handles the resizing of the dropped interfaces.
+ * 
+ * @param {DragEvent} event The dragEvent interface that contains the information about the drag
+ */
 
 let instance_resize = (event) => {
     let newWidth = event.target.__resizeTrigger__.clientWidth;
