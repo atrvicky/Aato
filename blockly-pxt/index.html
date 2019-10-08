@@ -88,13 +88,17 @@
                 <div class="container-fluid max-height">
                     <div class="row max-height">
                         <div class="col-sm-2 max-height" id="added-remote-showcase" style="margin-left: -15px;">
+                            <div class="col">
+                                <small id="no-remote-item-msg" class="text-muted"
+                                    style="width: 100%; margin: 16px auto; display: block; text-align: center">You have used all the interfaces. Click "Play" or add more interfaces.</small>
+                            </div>
                             <div class="" id="added-remote-item-list-container" style="height:85%; overflow: auto;">
                                 <!-- put the added (draggable) remote items here -->
 
                             </div>
                         </div>
                         <div class="col-sm-10 height-85" id="remote-builder">
-                            <div class="remote-workspace-wrapper max-height" style="position: relative;">
+                            <div class="remote-workspace-wrapper max-height" style="position: relative;" ondragover="drag_over(event)" ondrop="drop(event)">
                                 <!-- the dragged items are dropped here -->
 
                             </div>
@@ -160,7 +164,7 @@
     <!-- template for the added remote list. It is from here, user will drag the item to the workspace -->
     <div style="display: none" id="added-remote-template">
         <div>
-            <div class="align-items-center text-center added-remote-item" id="{{added-item-id}}" draggable="true">
+            <div class="align-items-center text-center added-remote-item" id="{{added-item-id}}" draggable="true" ondragstart="drag_start(event)">
                 <div class="row">
                     <div class="col-sm-12">
                         <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img"
@@ -296,6 +300,20 @@
             </div>
         </div>
     </div>
+
+    <!-- instance repo begin -->
+    <div id="remote-instances-repo" style="display: none;">
+
+        <!-- joystick layout begin -->
+        <div id="repo-joystick">
+            <div id="added-canvas-joystick-{{itemNo}}" class="resize-both draggable" draggable="true" ondragstart="drag_start(event)">
+                <canvas class="item-instance" id="joystick-"></canvas>
+            </div>
+        </div>
+        <!-- joystick layout end -->
+
+    </div>
+    <!-- instances repo end -->
 
     <!-- the custom workspace should be loaded here -->
     <xml id="workspaceBlocks" style="display:none">
@@ -751,7 +769,6 @@
     <script src="./js/injector.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="./js/comm.js"></script>
-    <script src="./js/create.js"></script>
     <script src="./js/remote.js"></script>
 
     <script>

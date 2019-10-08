@@ -77,16 +77,37 @@ html, body {
     position: relative;
   }
 
-  /* #joystick {
-    height: 300px;
-    width: 300px;
+  #joystick {
+    height: inherit;
+    width: inherit;
     border-radius: 300px;
     -moz-border-radius: 300px;
     -webkit-border-radius: 300px;
     text-align: center;
-    background-color: #80d5ff;
+    background-color: #ff220094;
     font: 24px/300px Helvetica, Arial, sans-serif;
     cursor: all-scroll;
     user-select: none;
     z-index: -100;
-  } */
+    min-width: inherit;
+    min-height: inherit;
+    max-width: inherit;
+    max-height: inherit;
+  }
+
+  .resize-both{
+    background: #f6e8ea;
+    border: 1px solid black;
+    overflow: hidden;
+    resize: both;
+    width: 100px;
+    height: 100px;
+    min-width: 80px;
+    min-height: 80px;
+    max-width: 250px;
+    max-height: 250px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 16px;
+  }
