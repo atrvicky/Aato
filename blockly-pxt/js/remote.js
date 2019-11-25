@@ -7,7 +7,6 @@ let showRemoteBtn = document.getElementById("show-remote-btn");
 let showRemoteFav = document.getElementById("show-remote-fav");
 let remoteDiv = document.getElementById("remote-div");
 let remoteItemsContainer = document.getElementById('remote-item-list-container');
-let addedRemoteItemsContainer = document.getElementById('added-remote-item-list-container');
 let addRemoteItemBtn = document.getElementById("add-remote-item-btn");
 let addJoystickBtn = document.getElementById("add-joystick-btn");
 let addSliderBtn = document.getElementById("add-slider-btn");
@@ -16,7 +15,7 @@ let remoteBuilderDiv = document.getElementById('remote-builder-wrapper');
 let remoteWorkspace = document.getElementById('remote-builder');
 let instancesRepo = document.getElementById('remote-instances-repo');
 let joystickRepo = document.getElementById('repo-joystick');
-let remoteCanvas = document.querySelector('.remote-workspace-wrapper');
+let remoteCanvas = document.querySelector('.remote-canvas');
 
 let remoteElements = [];    // stores the itemIds of the added remote items.
 let remoteUIs = []; // stores a json for the itemId, itemType, position and size
@@ -30,13 +29,26 @@ let designMode = true;  // flag indicates whether currently in design mode or ed
 let dragStartX = 0;
 let dragStartY = 0;
 
+const position = {
+    x: 0,
+    y: 0
+};
 
 let addedItemTemplate = () => {
     return $('#remote-template').html();
 };
 
-let addedDraggableItemTemplate = () => {
-    return $('#added-remote-template').html();
+let addedDraggableItemTemplate = (itemType, itemCount) => {
+    let canvasHTML;
+    switch (itemType){
+        case 'joystick': 
+            canvasHTML = $('#repo-joystick').html();
+            canvasHTML.replace('{{itemCount}}', itemCount);
+            console.log(canvasHTML);
+            break;
+    }
+
+    return canvasHTML;
 };
 
 window.addEventListener('load', () => {
@@ -54,8 +66,6 @@ let initiateRemoteMode = () => {
         blocklyArea.className = remoteDivDisplay === "none" ? "col-md-9" : "col-md-12";
         remoteBuilderDiv.className = remoteDivDisplay === "none" ? "col-md-9" : "col-md-12";
         showRemoteBtn.className = remoteDivDisplay === "none" ? "btn btn-dark" : "btn btn-light";
-        // blocklyArea.style.height = remoteDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
-        // remoteDiv.style.height = remoteDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
         remoteDiv.style.boxShadow = remoteDivDisplay === "none" && window.innerWidth < 720 ? "0px -7px 10px -10px #080708" : "-7px 0px 10px -10px #080708";
         remoteDiv.style.display = remoteDivDisplay === "none" ? "block" : "none";
         onresize();
@@ -86,14 +96,14 @@ let remoteInitated = () => {
 };
 
 addJoystickBtn.onclick = () => {
-    createChild('joystick', false);
+    createChild('joystick');
 };
 
 addSliderBtn.onclick = () => {
-    createChild('slider', false);
+    createChild('slider');
 };
 
-let createChild = (itemType, draggable) => {
+let createChild = (itemType) => {
     let itemCode = '';
     let itemName = '';
     let itemCount = 0;
@@ -117,7 +127,7 @@ let createChild = (itemType, draggable) => {
     let childId = 'remote-' + itemCode + '-' + itemCount;
     let draggableChildId = 'added-remote-' + itemCode + '-' + itemCount;
     let childElement = addedItemTemplate();
-    let draggableElement = addedDraggableItemTemplate();
+    let draggableElement = addedDraggableItemTemplate(itemType, itemCount);
     // add unique item id 
     childElement = childElement.replace('{{added-item-id}}', childId);
     draggableElement = draggableElement.replace('{{added-item-id}}', draggableChildId);
@@ -137,10 +147,10 @@ let createChild = (itemType, draggable) => {
     // console.log(childElement);
     // console.log(draggableElement);
     childElement = remoteItemsContainer.innerHTML + childElement;
-    draggableElement = addedRemoteItemsContainer.innerHTML + draggableElement;
+    draggableElement = remoteCanvas.innerHTML + draggableElement;
     remoteElements.push(childId);
     remoteItemsContainer.innerHTML = childElement;
-    addedRemoteItemsContainer.innerHTML = draggableElement;
+    remoteCanvas.innerHTML = draggableElement;
     $('#remoteShowcaseModal').modal('hide');
     remoteInitated();
 };
@@ -150,18 +160,22 @@ let checkRemoteCount = () => {
     playBtn.hidden = addedRemoteQuantity == 0;
     uploadBtn.hidden = addedRemoteQuantity > 0;
     instantUploadSwitch.disabled = addedRemoteQuantity > 0;
-    checkEmptyRemoteContainer();
 };
 
 let deleteRemoteItem = (id) => {
     let itemToDelete = document.getElementById(id);
     let draggableItemToDelete = document.getElementById('added-' + id);
     remoteItemsContainer.removeChild(itemToDelete);
-    addedRemoteItemsContainer.removeChild(draggableItemToDelete);
+    remoteCanvas.removeChild(draggableItemToDelete);
     remoteElements.pop(id);
     addedRemoteQuantity--;
     remoteInitated();
 };
+
+/**
+ * 
+ * @param {Boolean} overWriteRemote A flag to force the remoteBuilder
+ */
 
 let showRemoteBuilder = (overWriteRemote) => {
     isRemoteEnabled = overWriteRemote ? false : !isRemoteEnabled;
@@ -177,9 +191,155 @@ let whatToShowOnPlayBtn = () => {
     showCode.hidden = isRemoteEnabled;
 };
 
+let dragMoveListener = (event) => {
+    if (designMode) {
+
+        // grab the element using its id
+        let draggedChild = document.getElementById(event.target.id);
+
+        // keep the dragged position in the data-x/data-y attributes
+        let x = (draggedChild.offsetLeft || 0) + event.dx;
+        let y = (draggedChild.offsetTop || 0) + event.dy;
+
+        // translate the element
+        draggedChild.style.top = y + 'px';
+        draggedChild.style.left = x + 'px';
+    }
+};
+
+interact('.draggable').draggable({
+    // keep the element within the area of it's parent
+    modifiers: [
+        interact.modifiers.restrictRect({
+            restriction: 'parent',
+            endOnly: true
+        })
+    ],
+    // enable autoScroll
+    autoScroll: true,
+    onmove: dragMoveListener
+}).resizable({
+    // resize from all edges and corners
+    edges: { left: true, right: true, bottom: true, top: true },
+
+    modifiers: [
+        // keep the edges inside the parent
+        interact.modifiers.restrictEdges({
+            outer: 'parent',
+            endOnly: true
+        }),
+
+        // minimum size
+        interact.modifiers.restrictSize({
+            min: { width: 125, height: 125 },
+            max: { width: 250, height: 250 }
+        })
+    ]
+}).on('resizemove', (event) => {
+
+    // grab the element using its id
+    let draggedChild = document.getElementById(event.target.id);
+
+    // update the element's style
+    draggedChild.style.width = event.rect.width + 'px'
+    draggedChild.style.height = event.rect.height + 'px'
+
+    // keep the dragged position in the data-x/data-y attributes
+    let x = (draggedChild.offsetLeft || 0);
+    let y = (draggedChild.offsetTop || 0);
+
+    // translate when resizing from top or left edges
+    x += event.deltaRect.left
+    y += event.deltaRect.top
+
+    // translate the element
+    draggedChild.style.top = y + 'px';
+    draggedChild.style.left = x + 'px';
+});
+
+// this is used later in the resizing and gesture demos
+window.dragMoveListener = dragMoveListener;
+
+/*interact('.dropzone').dropzone({
+    accept: '.draggable'
+},
+    {
+        ondrop: function (event) {
+            if (designMode) {
+
+                alert(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+
+                // get the dragged element's id
+                let IdData = event.relatedTarget.id;
+                // the id has four parts: added-remote-ITEMTYPE-ITEMCOUNT
+                // create substrings using the '-'
+                IdData = IdData.split('-');
+
+                // items dragged from the canvas will have the keyword
+                // "canvas"instead of "remote" in index 1
+                // if so, they are not new drops
+                newDrop = IdData[1] != 'canvas';
+
+                // the second index contains the itemType information
+                let itemType = IdData[2];
+
+                // the third index contains the itemNo
+                let itemNo = IdData[3];
+
+                // check if the item is dropped fresh
+                if (newDrop) {
+                    // create functional instances (actual slider, joystick, etc) of the item being dropped
+                    let itemInstance = getInstance(itemType, itemNo);
+
+                    // add the target element to the canvas
+                    // let tm = document.getElementById(targetId);
+                    remoteCanvas.innerHTML = remoteCanvas.innerHTML + itemInstance;
+
+                }
+
+                // set the instance's position to absolute w.r.t the parent container(the remote)
+                let instanceId = 'added-canvas-' + itemType + '-' + itemNo;
+                let instanceElement = document.getElementById(instanceId);
+
+                // adjust for the parent's position
+                let parentX = getPosition(remoteCanvas).x;
+                let parentY = getPosition(remoteCanvas).y;
+
+                // calculate the instance's startX, startY, endX and endY
+                instanceElement.style.top = dropY - parentY - dragStartY + 'px';
+                instanceElement.style.left = dropX - parentX - dragStartX + 'px';
+
+                // create a json with id, type, startX, startY, endX, endY
+                let child = {
+                    id: instanceId,
+                    top: instanceElement.style.top,
+                    left: instanceElement.style.left,
+                    width: instanceElement.offsetWidth,
+                    height: instanceElement.offsetHeight
+                };
+
+                // add the json to the remoteUIs array.
+                addChildToArray(child);
+
+                // if it is a new drop, hide the parent item from the added-remote-list
+                IdData = IdData.join('-');
+                if (newDrop) {
+                    $('#' + IdData).hide();
+                }
+
+                // finally, add resize listeners        
+
+                checkEmptyRemoteContainer();
+            }
+        }
+    }).on('dropactivate', function (event) {
+        event.target.classList.add('drop-activated')
+    });*/
+
+
 /* actual version of the drag-drop handler can be found at https://codepen.io/Neddard/pen/KKKKEvr */
 
-let drag_start = (event) => {
+/*let drag_start = (event) => {
     if (designMode) {
         var style = window.getComputedStyle(event.target, null);
         event.dataTransfer.setData("text/plain", parseInt(style.getPropertyValue("left"), 10) - event.clientX + "," + (parseInt(style.getPropertyValue("top"), 10) - event.clientY));
@@ -194,8 +354,7 @@ let drag_start = (event) => {
 
 let drag_over = (event) => {
     if (designMode) {
-        event.preventDefault();
-        checkBoundaries(event);
+        event.preventDefault();        
         return false;
     }
 };
@@ -266,14 +425,14 @@ let drop = (event) => {
             $('#' + IdData).hide();            
         }
 
-        // finally, add resize listeners
-        addResizeListener(instanceElement, instance_resize);
+        // finally, add resize listeners        
 
         checkEmptyRemoteContainer();
         return false;
     }
 };
 
+*/
 /**
  * Create the functional instances of the remote items using the itemType
  * 
@@ -311,21 +470,6 @@ let addChildToArray = (child) => {
     remoteUIs.push(child);
 };
 
-
-/**
- * 
- * Checks for overlap when items are dragged and also keeps the drag within boundary.
- * If there are overlaps, the item is dropped to the right or left of the interface that is being overlapped.
- * If the drop is beyond the dropZone, the item is drop at the top-left corner of the dropZone.
- * Any overlaps even then will be handled just as stated above.
- * 
- * @param {DragEvent} event The dragEvent interface that contains the information about the drag
- */
-let checkBoundaries = (event) => {
-    let eventX = event.clientX;
-    let eventY = event.clientY;
-};
-
 /**
  * 
  * Handles the resizing of the dropped interfaces.
@@ -333,7 +477,7 @@ let checkBoundaries = (event) => {
  * @param {DragEvent} event The dragEvent interface that contains the information about the drag
  */
 
-let instance_resize = (event) => {
+/*let instance_resize = (event) => {
     let newWidth = event.target.__resizeTrigger__.clientWidth;
     let newHeight = event.target.__resizeTrigger__.clientHeight;
     let resizedElementId = event.target.__resizeTrigger__.id;
@@ -349,111 +493,14 @@ let instance_resize = (event) => {
             }
     }
 };
-
+*/
 let checkEmptyRemoteContainer = () => {
-    if (remoteUIs.length >= remoteElements.length){
+    if (remoteUIs.length >= remoteElements.length) {
         $('#no-remote-item-msg').show();
-    } else{
+    } else {
         $('#no-remote-item-msg').hide();
     }
 };
-
-// Helper function to get an element's exact position
-let getPosition = (el) => {
-    var xPos = 0;
-    var yPos = 0;
-
-    while (el) {
-        if (el.tagName == "BODY") {
-            // deal with browser quirks with body/window/document and page scroll
-            var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
-            var yScroll = el.scrollTop || document.documentElement.scrollTop;
-
-            xPos += (el.offsetLeft - xScroll + el.clientLeft);
-            yPos += (el.offsetTop - yScroll + el.clientTop);
-        } else {
-            // for all other non-BODY elements
-            xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-            yPos += (el.offsetTop - el.scrollTop + el.clientTop);
-        }
-
-        el = el.offsetParent;
-    }
-    return {
-        x: xPos,
-        y: yPos
-    };
-};
-
-
-// the resize listeners
-// (http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/)
-(function(){
-    var attachEvent = document.attachEvent;
-    var isIE = navigator.userAgent.match(/Trident/);
-    console.log(isIE);
-    var requestFrame = (function(){
-      var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-          function(fn){ return window.setTimeout(fn, 20); };
-      return function(fn){ return raf(fn); };
-    })();
-    
-    var cancelFrame = (function(){
-      var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-             window.clearTimeout;
-      return function(id){ return cancel(id); };
-    })();
-    
-    function resizeListener(e){
-      var win = e.target || e.srcElement;
-      if (win.__resizeRAF__) cancelFrame(win.__resizeRAF__);
-      win.__resizeRAF__ = requestFrame(function(){
-        var trigger = win.__resizeTrigger__;
-        trigger.__resizeListeners__.forEach(function(fn){
-          fn.call(trigger, e);
-        });
-      });
-    }
-    
-    function objectLoad(e){
-      this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
-      this.contentDocument.defaultView.addEventListener('resize', resizeListener);
-    }
-    
-    window.addResizeListener = function(element, fn){
-      if (!element.__resizeListeners__) {
-        element.__resizeListeners__ = [];
-        if (attachEvent) {
-          element.__resizeTrigger__ = element;
-          element.attachEvent('onresize', resizeListener);
-        }
-        else {
-          if (getComputedStyle(element).position == 'static') element.style.position = 'relative';
-          var obj = element.__resizeTrigger__ = document.createElement('object'); 
-          obj.setAttribute('style', 'display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1;');
-          obj.__resizeElement__ = element;
-          obj.onload = objectLoad;
-          obj.type = 'text/html';
-          if (isIE) element.appendChild(obj);
-          obj.data = 'about:blank';
-          if (!isIE) element.appendChild(obj);
-        }
-      }
-      element.__resizeListeners__.push(fn);
-    };
-    
-    window.removeResizeListener = function(element, fn){
-      element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
-      if (!element.__resizeListeners__.length) {
-        if (attachEvent) element.detachEvent('onresize', resizeListener);
-        else {
-          element.__resizeTrigger__.contentDocument.defaultView.removeEventListener('resize', resizeListener);
-          element.__resizeTrigger__ = !element.removeChild(element.__resizeTrigger__);
-        }
-      }
-    }
-  })();
-
 
 // perform this check at the end of loading the file.
 checkRemoteCount();
