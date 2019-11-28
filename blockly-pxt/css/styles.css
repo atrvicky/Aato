@@ -1,20 +1,78 @@
-*{
-  box-sizing: border-box;
-}
+  *{
+    box-sizing: border-box;
+  }
 
-html, body {
+  html, body {
     height: 100%;
     margin: 0;
     font-family: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;
   }
+
   body {
     font-family: sans-serif;
     overflow: hidden;
   }
+
   h1 {
     font-weight: normal;
     font-size: 100%;
   }
+
+  #mode-indicator{
+    text-align: end;
+    font-family: 'Tomorrow', 'sans-serif';
+    font-weight: 300;
+    padding: 8px 8px 0px 8px;
+    margin-bottom: 0px;
+  }
+
+  #mode-indicator-wrapper{
+    cursor: pointer;
+  }
+
+  #buttons-wrapper .btn{
+    cursor: pointer;
+  }
+
+  #buttons-wrapper .btn:last-child{
+    margin-right: 8px;
+  }
+
+  .indicator{
+    width: 100%;
+  }
+
+  .indicator .text, .toggle .text{
+    font-family: 'Tomorrow', 'sans-serif';
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  #toggle-a-wrapper{
+    padding-right: 8px;
+  }
+
+  #toggle-b-wrapper{
+    padding-left: 50px;
+  }
+
+  .joystick-wrapper{
+    position: absolute;
+  }
+
+  .joystick-buttons{
+    margin: 8px;
+  }
+
+  .indicator .light{
+    color: #ff2400;
+  }
+
+  #buttons-wrapper{
+    text-align: end;
+  }
+
   #show-code-btn, #upload-btn{
     margin-left: 4px;
   }
@@ -38,28 +96,6 @@ html, body {
     cursor: pointer;
   }
 
-  .remote-item-wrapper{
-    border: 0.5px solid #0807084a;
-    border-radius: 5px;
-    padding: 4px;
-    margin-bottom: 4px;
-    width: 100px;
-    height: auto;
-  }
-
-  .remote-list-item{
-    margin: 8px auto;
-    height: 100px;    
-    width: 100%;
-    border: 0.5px solid #0807084a;
-    border-radius: 5px;
-    display: flex;
-  }
-
-  .added-remote-item-name{
-    margin-bottom: 0px;
-  }
-
   .error-modal-header{
     background: #ff2400;
     color: white;
@@ -67,51 +103,4 @@ html, body {
 
   .error-modal-header .close{
     color: white;
-  }
-
-  #added-remote-showcase{
-    box-shadow: rgb(8, 7, 8) 5px 0px 10px -10px;
-  }
-
-  #added-remote-item-list-container{
-    padding: 16px;
-  }
-
-  .added-remote-item{
-    width: 125px;
-    height: 125px;
-    max-width: 250px;
-    max-height: 250px;
-    min-width: 125px;
-    min-height: 125px;
-    text-align: center;
-    position: absolute;
-  }
-
-  .remote-builder, .remote-canvas{
-    position: relative;
-  }
-
-  .remote-canvas{
-    background: #f6e8ea;
-    margin: 8px auto;
-  }
-
-  .resize-both{
-    background: #f6e8ea;
-    border: 1px solid black;
-    width: 100px;
-    height: 100px;
-    min-width: 80px;
-    min-height: 80px;
-    max-width: 250px;
-    max-height: 250px;
-    margin: 16px;
-  }
-
-  .draggable{    
-  touch-action: none;
-  user-select: none;
-  -webkit-transform: translate(0px, 0px);
-          transform: translate(0px, 0px);
   }

@@ -40,6 +40,11 @@ Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
 
 
 let onresize = function(e) {
+  // warn the user if the screen is too small
+  if (window.innerWidth < 715) {
+    popError('Your screen size is too small. Some features may be erratic!');
+  }
+
   // Compute the absolute coordinates and dimensions of blocklyArea.
   let element = blocklyArea;
   let x = 0;
@@ -55,6 +60,7 @@ let onresize = function(e) {
   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
   Blockly.svgResize(workspace);
+  createJoysticks();
 };
 window.addEventListener('resize', onresize, false);
 onresize();

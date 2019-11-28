@@ -24,48 +24,93 @@
     <script src="generators/gen_custom_js.js"></script>
     <script src="generators/gen_custom_py.js"></script>
     <script src="msg/js/en.js"></script>
-    <script src="./js/FileSaver.js"></script>
     <!-- <script src="js/toolbox.js"></script> -->
     <link rel="stylesheet" href="./css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Tomorrow:300,400,500&display=swap" rel="stylesheet"> 
     <script defer src="./js/icons.min.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid" id="main-wrapper">
-        <div class="row justify-content-between"
-            style="height: 48px; text-align: center-vertical; position: relative; z-index: 1000; box-shadow: 0px 0px 5px 0px #080708;">
-            <div class="col-xs-2" style="align-self: center">
-                <h2 style="margin: auto 16px;">Aato</h2>
-            </div>
-            <div class="col-xs-2" style="align-self: center; text-align: end">
-                <div id="buttons" style="margin: auto 16px">
-                    <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i
-                            class="fas fa-link" id="connect-fav"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" disabled onclick="upload()"><i
-                            class="fas fa-cloud-upload-alt" id="upload-fav"></i> Upload</button>
-                    <button type="button" class="btn btn-light btn-sm" id="play-btn" onclick="showRemoteBuilder()"><i
-                            class="fas fa-play-circle" id="play-fav"></i> Play</button>
-                    <p id="file-status"
-                        style="position: relative; top: 0px; left: 0px; right: 0px; text-align: center; display:none">
-                    </p>
-                    <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="show_settings()"><i
-                            class="fas fa-cog"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="help-btn" style="display: none"><i
-                            class="fas fa-question-circle"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="show-console-btn" style="display: none"><i
-                            class="fas fa-terminal"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="show-code-btn"><i class="fas fa-code"
-                            id="show-code-fav"></i> Code</button>
-                    <button type="button" class="btn btn-light btn-sm" id="show-remote-btn"
-                        onclick="initiateRemoteMode()"><i class="fas fa-gamepad" id="show-remote-fav"
-                            disabled></i></button>
+    <div class="container-fluid" id="main-wrapper">        
+        <div class="row" style="height: 100%; position: relative; z-index:100;">
+            <div class="col-sm-3" id="floating-container" style="position: absolute; top: 0px; right: 0px; z-index: 101;">
+                <div id="mode-indicator-wrapper" onclick="showRemote()">
+                    <p id="mode-indicator">Design Mode</p>
                 </div>
-            </div>
-        </div>
-        <div class="row" style="height: 100%">
-            <div class="col-md-12" id="blocklyArea">
-                <div id="blocklyDiv" style="position: absolute">
+                <!-- control panel -->
+                <div id="buttons-wrapper">
+                    <button type="button" class="btn btn-light btn-sm" id="terminal-btn" onclick="showTerminal()"><i class="fas fa-terminal" id="show-terminal-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i class="fas fa-link" id="connect-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="showSettings()"><i class="fas fa-cog" id="show-settings-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" onclick="runCode()"><i class="fas fa-play" id="upload-fav"></i></button>
+                </div>
 
+            </div>
+            <div class="col-md-12" id="blocklyArea">
+                <div id="blocklyDiv" style="position: absolute;">
+
+                </div>
+                <div class="container-fluid" id="remote-div" style="position: absolute; display: none; height: 100%;">
+                    <div class="row joystick-rows" id="remote-indicators" style="margin-top: 16px;">
+                        <!-- contains the indicators and displays in the remote -->
+                        <div class="indicator">
+                            <i class="fas fa-circle light" id="indicator-light-a"></i>
+                            <span class="text" id="indicator-a-text">Indicator-A</span>
+                        </div>
+                        <div class="indicator">
+                            <i class="fas fa-circle light" id="indicator-light-b"></i>
+                            <span class="text" id="indicator-b-text">Indicator-B</span>
+                        </div>
+                    </div>
+
+                    <div class="row joystick-rows" id="remote-dynamic">
+                        <!-- contains thedynamic elements like joystick and toggle switches -->
+                        <div class="col-sm-6">
+                            <div class="toggle" style="text-align: right;">
+                                <span class="text">Toggle-A</span>
+                                <div class="custom-control custom-switch" id="toggle-a-wrapper">
+                                    <input type="checkbox" class="custom-control-input" id="toggle-a">
+                                    <label class="custom-control-label text" for="toggle-a"></label>
+                                </div>
+                            </div>
+                            <div class="joystick-wrapper" id="left-joystick">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="toggle" style="text-align: left;">
+                                <span class="text">Toggle-B</span>
+                                <div class="custom-control custom-switch" id="toggle-b-wrapper">
+                                    <input type="checkbox" class="custom-control-input" id="toggle-b">
+                                    <label class="custom-control-label text" for="toggle-b"></label>
+                                </div>
+                            </div>
+                            <div class="joystick-wrapper" id="right-joystick">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row joystick-rows" id="remote-statics" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                        <!-- contains the static elements such as push-buttons -->
+                        <div class="col-sm-6">
+                            <div class="joystick-buttons" style="text-align: right;">
+                                <button type="button" id="btn-a" class="btn btn-danger btn-lg">Btn-A</button>
+                            </div>
+                            <div class="joystick-buttons" style="text-align: right;">
+                                <button type="button" id="btn-b" class="btn btn-danger btn-lg">Btn-B</button>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="joystick-buttons" style="text-align: left;">
+                                <button type="button" id="btn-c" class="btn btn-danger btn-lg">Btn-C</button>
+                            </div>
+                            <div class="joystick-buttons" style="text-align: left;">
+                                <button type="button" id="btn-d" class="btn btn-danger btn-lg">Btn-D</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="toast-wrapper" style="position:absolute; bottom:70px; right:10px">
                     <!-- Then put toasts within -->
@@ -83,80 +128,12 @@
                     </div>
                 </div>
             </div>
-            <!-- Remote Builder Begin -->
-            <div id="remote-builder-wrapper" class="max-height" style="display: none;">
-                <div class="container-fluid max-height">
-                    <div class="row max-height">
-                        <div class="col" id="remote-builder">
-                            <div class="remote-canvas max-height">
-                                <!-- the dragged items are dropped here -->
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Remote Builder End -->
+            
             <div class="col-md-0" id="code-div" style="display: none; height: 100%">
                 <div id="code-div-container" style="display: block; height: 98%">
 
                 </div>
-            </div>
-            <div class="col-md-0" id="remote-div" style="display: none; height: 100%">
-                <div id="remote-div-container" style="display: block; height: 98%">
-                    <div class="container" style="height: 100%">
-                        <div class="row align-items-center" id="no-item-msg-container" style="height: 85%">
-                            <div class="col">
-                                <small id="no-item-msg" class="text-muted"
-                                    style="width: 100%; margin: 0 auto; display: block; text-align: center">You have not
-                                    added any remote
-                                    items! You can add upto 10 remote items by tapping the button below.</small>
-                            </div>
-                        </div>
-                        <div class="" id="remote-item-list-container"
-                            style="height: 85%; overflow: auto; margin-bottom: 8px;">
-                            <!-- put the added remote items here -->
-
-
-
-                        </div>
-                        <div class="row align-items-end">
-                            <div class="col">
-                                <button id="add-remote-item-btn" type="button" class="btn btn-primary"
-                                    style="width: 100%"><i class="fas fa-gamepad"></i> Add Remote items</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- template for the remote list -->
-    <div style="display: none" id="remote-template">
-        <div class="remote-list-item align-items-center" id="{{added-item-id}}">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-sm-4">
-                        <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img">
-                    </div>
-                    <div class="col-sm-8">
-                        <p class="added-remote-item-1-name">{{item-name}}</p>
-                        <button class="btn btn-sm btn-danger" id="{{delete-remote-btn}}" onclick="deleteRemoteItem()"><i
-                                class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- template for the added remote list. It is from here, user will drag the item to the workspace -->
-    <div style="display: none" id="added-remote-template">
-        <div class="added-remote-item draggable" id="{{added-item-id}}">
-            <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img"
-                style="max-width: 100px;">
-            <p class="added-remote-item-1-name text-center">{{item-name}}</p>
+            </div>            
         </div>
     </div>
 
@@ -232,74 +209,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Add remote item modal -->
-    <div class="modal fade" id="remoteShowcaseModal" tabindex="-1" role="dialog"
-        aria-labelledby="remoteShowcaseModalTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="remoteShowcaseModalTitle"><i class="fas fa-gamepad"></i> Remote items
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-
-                            <!-- item 1 layout begin -->
-                            <div class="col-md-3">
-                                <div class="remote-item-wrapper text-center">
-                                    <img src="./images/joystick.png" alt="Joystick Controller" class="img-thumbnail">
-                                    <p class="showcase-item-title">Joystick</p>
-                                    <button id="add-joystick-btn" type="button" class="btn btn-primary add-item-btn"
-                                        style="width: 100%"><i class="fas fa-plus"></i></button>
-                                </div>
-                            </div>
-                            <!-- item 1 layout ends -->
-
-                            <!-- item layout begin -->
-                            <div class="col-md-3">
-                                <div class="remote-item-wrapper text-center">
-                                    <img src="./images/slider.png" alt="Slider Controller" class="img-thumbnail">
-                                    <p class="showcase-item-title">Linear Slider</p>
-                                    <button id="add-slider-btn" type="button" class="btn btn-primary add-item-btn"
-                                        style="width: 100%"><i class="fas fa-plus"></i></button>
-                                </div>
-                            </div>
-                            <!-- item layout ends -->
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <small id="no-item-msg" class="text-muted"
-                        style="width: 100%; margin: 0 auto; display: block; text-align: center">You can add <span
-                            id="remote-items-available">10</span> more remote items.</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- instance repo begin -->
-    <div id="remote-instances-repo" style="display: none;">
-
-        <!-- joystick layout begin -->
-        <div id="repo-joystick">
-            <div id="canvas-joystick-{{itemCount}}" class="">
-                <div class="added-remote-item draggable" id="{{added-item-id}}">
-                    <img src="{{item-img}}" alt="{{item-alt}}" class="img-thumbnail remote-list-item-img"
-                        style="max-width: 100px; display: none;">
-                    <p class="added-remote-item-1-name text-center">{{item-name}}</p>
-                </div>
-            </div>
-        </div>
-        <!-- joystick layout end -->
-
-    </div>
-    <!-- instances repo end -->
 
     <!-- the custom workspace should be loaded here -->
     <xml id="workspaceBlocks" style="display:none">
@@ -755,36 +664,50 @@
     <script src="./js/injector.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="./js/comm.js"></script>
-    <script src="./node_modules/nipplejs/dist/nipplejs.js"></script>
-    <script src="./js/interact.js"></script>
-    <script src="./js/remote.js"></script>
+    <script src="./js/nipplejs.js"></script>
 
     <script>
         onresize();
-        // custom button
-        let showCode = document.getElementById("show-code-btn");
-        let showCodeFav = document.getElementById("show-code-fav");
-        showCode.onclick = () => {
+
+        let floatingContainer = document.getElementById('floating-container');
+        let showTerminal = () => {
+            // grab the buttons and the required divs
+            let showCode = document.getElementById("terminal-btn");
+            let showCodeFav = document.getElementById("show-terminal-fav");
             let codeDiv = document.getElementById("code-div");
+
+            // check the display style of the code-div
             codeDivDisplay = codeDiv.style.display;
-            codeDiv.className = codeDivDisplay === "none" ? "col-md-4" : "col-md-0";
-            blocklyArea.className = codeDivDisplay === "none" ? "col-md-8" : "col-md-12";
-            showCode.className = codeDivDisplay === "none" ? "btn btn-dark" : "btn btn-light";
+
+            // if the code-div is hidden, show it by setting a width else, set the width to 0
+            codeDiv.className = codeDivDisplay === "none" ? "col-sm-4" : "col-sm-0";
+
+            // adjust the blockly area to adapt to the new width
+            blocklyArea.className = codeDivDisplay === "none" ? "col-sm-8" : "col-sm-12";
+
+            // highlight or normalize the showTerminal button
+            showCode.className = codeDivDisplay === "none" ? "btn btn-dark btn-sm" : "btn btn-light btn-sm";
+
+            // for smaller displays (<720px), terminal appears at the bottom -> reduce the height of blocklyarea
             blocklyArea.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "75%" : "100%";
             codeDiv.style.height = codeDivDisplay === "none" && window.innerWidth < 720 ? "25%" : "100%";
             codeDiv.style.boxShadow = codeDivDisplay === "none" && window.innerWidth < 720 ? "0px -7px 10px -10px #080708" : "-7px 0px 10px -10px #080708";
+
+            // finally show the code-div
             codeDiv.style.display = codeDivDisplay === "none" ? "block" : "none";
+
+            // adjust the position of the floatingContainer according to code-div
+            codeWidth = codeDiv.offsetWidth;
+            floatingContainer.style.right = codeWidth + 'px';
             onresize();
             createEditor();
         };
-    </script>
 
-    <script>
         // a variable to hold the timeout functions
         let timeOut;
 
         // script to debug the blocks
-        function onDropBlock(event) {
+        function onBlockDrop(event) {
             clearTimeout(timeOut);
             if ((event.type == Blockly.Events.BLOCK_DELETE) || (event.type == Blockly.Events.BLOCK_CHANGE) || (event.type == Blockly.Events.BLOCK_MOVE)) {
                 //console.log(Blockly.JavaScript.workspaceToCode(workspace));
@@ -802,7 +725,7 @@
                 }
             }
         }
-        workspace.addChangeListener(onDropBlock);
+        workspace.addChangeListener(onBlockDrop);
     </script>
 
     <script src="./monaco-editor/min/vs/loader.js"></script>

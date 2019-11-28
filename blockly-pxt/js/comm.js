@@ -1,30 +1,35 @@
+"use strict";
+
 let ws;
 let url = "ws://192.168.4.1:8266/"
 let connected = false;
 let instantUpload = false;
+let joystickSizePercent = 0.25;
 let binary_state = 0;
 let put_file_name = null;
 let put_file_data = null;
 let get_file_name = null;
 let get_file_data = null;
+let joystickL;
+let joystickR;
 let connectBtn = document.getElementById("connect-btn");
 let connectBtnFav = document.getElementById("connect-fav");
-let connectFav = '<i class="fas fa-link" id="connect-fav"></i> Connect';
-let disconnectFav = '<i class="fas fa-unlink" id="connect-fav"></i> Disconnect';
+let connectFav = '<i class="fas fa-link" id="connect-fav"></i>';
+let disconnectFav = '<i class="fas fa-unlink" id="connect-fav"></i>';
 let uploadBtn = document.getElementById("upload-btn");
 let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
 let statusToastBody = document.getElementsByClassName("toast-body")[0];
 let instantUploadSwitch = document.getElementById("instant-upload-switch");
 let codeDiv = document.getElementById("code-div");
+let remoteDiv = document.getElementById("remote-div");
 
-checkConnectionStatus()
 
-$(function () {
+$(() => {
     $('[data-toggle="tooltip"]').tooltip()
 })
 
-function initConnection() {
+let initConnection = () => {
     if (connected) {
         ws.close();
     } else {
@@ -38,7 +43,7 @@ instantUploadSwitch.onchange = () => {
     instantUpload = !instantUpload;
     uploadBtn.hidden = instantUpload;
     let cmd = '';
-    if (instantUpload){
+    if (instantUpload) {
         cmd = 'liveMode(True)';
     } else {
         cmd = 'liveMode(False)';
@@ -47,13 +52,15 @@ instantUploadSwitch.onchange = () => {
     sendData('import gpio, sensors, pwm, utime');
 };
 
-function checkConnectionStatus() {
+let checkConnectionStatus = () => {
     connectBtn.innerHTML = connected ? disconnectFav : connectFav;
     uploadBtn.disabled = !connected;
     // uploadBtn.disabled = false;
 }
 
-function update_file_status(s) {
+checkConnectionStatus()
+
+let update_file_status = (s) => {
     // fileStatus.innerHTML = s;
     // fileStatus.style.display = "block";
     // setInterval(() => {
@@ -66,13 +73,13 @@ function update_file_status(s) {
     $('.toast').toast('show');
 }
 
-function show_settings(){
+let showSettings = () => {
     $('#settingsModal').modal({
         'show': true
     });
 }
 
-function popError(msg){
+let popError = (msg) => {
     $('#error-msg').html(msg);
 
     $('#errorModal').modal({
@@ -80,13 +87,66 @@ function popError(msg){
     });
 }
 
-function sendPassword(){
+let showRemote = () => {
+    let isRemoteVisible = remoteDiv.style.display != "none";
+    remoteDiv.style.display = isRemoteVisible ? "none" : "block";
+    blocklyDiv.style.display = isRemoteVisible ? "block" : "none";
+    $('#mode-indicator').text(isRemoteVisible ? 'Design Mode' : 'Remote Mode');
+    onresize();
+};
+
+let createJoysticks = () => {
+    // try to destroy any existing instances of the joystick
+    try{
+        joystickL.destroy();
+        joystickR.destroy();
+    } catch (err) {
+        console.log(err);
+    }
+
+    let leftJsWrapper = document.getElementById('left-joystick');
+    let rightJsWrapper = document.getElementById('right-joystick');
+
+    let joystickTop = 90 * window.innerHeight / 320;
+    joystickTop += 'px';
+    let joystickLeft = blocklyArea.offsetWidth * 0.23;
+    joystickLeft += 'px';
+    
+    let joystickSize = blocklyArea.offsetWidth * joystickSizePercent
+    joystickL = nipplejs.create({
+        zone: leftJsWrapper,
+        mode: 'static',
+        color: 'red',
+        position: { left: joystickLeft, top: joystickTop },
+        size: joystickSize
+    });
+    joystickR = nipplejs.create({
+        zone: rightJsWrapper,
+        mode: 'static',
+        color: 'red',
+        position: { left: joystickLeft, top: joystickTop },
+        size: joystickSize
+    });    
+
+    // adjust the button sizes
+    let btnA = document.getElementById('btn-a');
+    let btnB = document.getElementById('btn-b');
+    let btnC = document.getElementById('btn-c');
+    let btnD = document.getElementById('btn-d');
+
+    btnA.className = blocklyArea.offsetWidth < 1020 ? "btn btn-danger btn-sm" : "btn btn-danger btn-lg";
+    btnB.className = blocklyArea.offsetWidth < 1020 ? "btn btn-danger btn-sm" : "btn btn-danger btn-lg";
+    btnC.className = blocklyArea.offsetWidth < 1020 ? "btn btn-danger btn-sm" : "btn btn-danger btn-lg";
+    btnD.className = blocklyArea.offsetWidth < 1020 ? "btn btn-danger btn-sm" : "btn btn-danger btn-lg";
+};
+
+let sendPassword = () => {
     $('#repl-password').val('');
     $('#passwordModal').on('shown.bs.modal', function () {
         $('#repl-password').trigger('focus');
-      })
+    })
     $('#passwordModal').modal({
-        'backdrop':'static',
+        'backdrop': 'static',
         'show': true
     });
     $('#repl-password').on('input', (event) => {
@@ -95,14 +155,14 @@ function sendPassword(){
     });
 }
 
-function parse_send_password(){
+let parse_send_password = () => {
     let pw = $('#repl-password').val();
     sendData(pw);
     $('#passwordModal').modal('hide');
 }
 
-function upload(){
-    if (!instantUpload){
+let upload = () => {
+    if (!instantUpload) {
         let eventLoop = "import gpio, sensors, pwm, utime \n";
         eventLoop = eventLoop + Blockly.Python.workspaceToCode(workspace);
         console.log(eventLoop);
@@ -112,9 +172,9 @@ function upload(){
     }
 }
 
-function sendData(data){
+let sendData = (data) => {
     // data = data.replace(/\n/g, "");
-    if (connected){
+    if (connected) {
         console.log('sending: ', data);
         data = data + '\r\n';
         ws.send(data);
@@ -123,13 +183,13 @@ function sendData(data){
     }
 }
 
-function createEditor(){
+let createEditor = () => {
     let pyCode = Blockly.Python.workspaceToCode(workspace);
     pyCode = pyCode == "" ? '#Start Building to see the code here' : pyCode;
     let editorContainer = document.getElementById('code-div-container');
     editorContainer.innerHTML = "";
-    require.config({ paths: { 'vs': './monaco-editor/min/vs' }});
-    require(['vs/editor/editor.main'], function() {
+    require.config({ paths: { 'vs': './monaco-editor/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
         var editor = monaco.editor.create(editorContainer, {
             value: pyCode,
             language: 'python',
@@ -143,19 +203,19 @@ function createEditor(){
     });
 }
 
-function updateCode(code){
+let updateCode = (code) => {
     let model = monaco.editor.getModels()[0];
     model.setValue(code);
 }
 
-function connect(url) {
+let connect = (url) => {
     update_file_status("Connecting..");
     ws = new WebSocket(url);
     ws.binaryType = 'arraybuffer';
-    ws.onopen = function() {
+    ws.onopen = function () {
         update_file_status("Websocket Connected.");
         let msg = ""
-        ws.onmessage = function(event) {
+        ws.onmessage = function (event) {
             if (event.data instanceof ArrayBuffer) {
                 let data = new Uint8Array(event.data);
                 switch (binary_state) {
@@ -217,7 +277,7 @@ function connect(url) {
                         // final response
                         if (decode_resp(data) == 0) {
                             update_file_status('Got ' + get_file_name + ', ' + get_file_data.length + ' bytes');
-                            saveAs(new Blob([get_file_data], {type: "application/octet-stream"}), get_file_name);
+                            saveAs(new Blob([get_file_data], { type: "application/octet-stream" }), get_file_name);
                         } else {
                             update_file_status('Failed getting ' + get_file_name);
                         }
@@ -231,34 +291,34 @@ function connect(url) {
                 }
             }
             let msg = event.data;
-            console.log('incoming: ',  msg);
+            console.log('incoming: ', msg);
 
-            if (msg.match(/Password:/g) != null){
+            if (msg.match(/Password:/g) != null) {
                 sendPassword();
-            } else if (msg.match(/Access denied/gi)){
+            } else if (msg.match(/Access denied/gi)) {
                 connected = false;
                 update_file_status(msg);
                 checkConnectionStatus()
-            } else if (msg.match(/WebREPL connected/gi)){
+            } else if (msg.match(/WebREPL connected/gi)) {
                 connected = true;
                 update_file_status("Connected");
                 checkConnectionStatus()
-            } else if (msg == ">>>"){
+            } else if (msg == ">>>") {
                 update_file_status('Ready');
-            }else {
+            } else {
                 update_file_status(msg);
             }
         };
     };
 
-    ws.onclose = function() {
+    ws.onclose = function () {
         connected = false;
         update_file_status("Disconnected");
         checkConnectionStatus();
     }
 }
 
-function decode_resp(data) {
+let decode_resp = (data) => {
     if (data[0] == 'W'.charCodeAt(0) && data[1] == 'B'.charCodeAt(0)) {
         let code = data[2] | (data[3] << 8);
         return code;
@@ -267,7 +327,7 @@ function decode_resp(data) {
     }
 }
 
-function put_file() {
+let put_file = () => {
     let dest_fname = put_file_name;
     let dest_fsize = put_file_data.length;
 
@@ -294,7 +354,7 @@ function put_file() {
     ws.send(rec);
 }
 
-function get_file() {
+let get_file = () => {
     let src_fname = document.getElementById('get_filename').value;
 
     // WEBREPL_FILE = "<2sBBQLH64s"
@@ -322,7 +382,7 @@ function get_file() {
     ws.send(rec);
 }
 
-function get_ver() {
+let get_ver = () => {
     // WEBREPL_REQ_S = "<2sBBQLH64s"
     let rec = new Uint8Array(2 + 1 + 1 + 8 + 4 + 2 + 64);
     rec[0] = 'W'.charCodeAt(0);
@@ -335,16 +395,16 @@ function get_ver() {
     ws.send(rec);
 }
 
-function handle_put_file_select(code) {
+let handle_put_file_select = (code) => {
     put_file_name = "event.py";
     put_file_data = rawStringToBuffer(code);
     put_file();
 }
 
-function rawStringToBuffer(str) {
-    let idx, len = str.length, arr = new Array( len );
-    for ( idx = 0 ; idx < len ; ++idx ) {
-        arr[ idx ] = str.charCodeAt(idx) & 0xFF;
+let rawStringToBuffer = (str) => {
+    let idx, len = str.length, arr = new Array(len);
+    for (idx = 0; idx < len; ++idx) {
+        arr[idx] = str.charCodeAt(idx) & 0xFF;
     }
     // You may create an ArrayBuffer from a standard array (of values) as follows:
     return new Uint8Array(arr);
