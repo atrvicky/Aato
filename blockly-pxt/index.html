@@ -26,23 +26,28 @@
     <script src="msg/js/en.js"></script>
     <!-- <script src="js/toolbox.js"></script> -->
     <link rel="stylesheet" href="./css/styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Tomorrow:300,400,500&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Tomorrow:300,400,500&display=swap" rel="stylesheet">
     <script defer src="./js/icons.min.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid" id="main-wrapper">        
+    <div class="container-fluid" id="main-wrapper">
         <div class="row" style="height: 100%; position: relative; z-index:100;">
-            <div class="col-sm-3" id="floating-container" style="position: absolute; top: 0px; right: 0px; z-index: 101;">
+            <div class="col-sm-3" id="floating-container"
+                style="position: absolute; top: 0px; right: 0px; z-index: 101;">
                 <div id="mode-indicator-wrapper" onclick="showRemote()">
                     <p id="mode-indicator">Design Mode</p>
                 </div>
                 <!-- control panel -->
                 <div id="buttons-wrapper">
-                    <button type="button" class="btn btn-light btn-sm" id="terminal-btn" onclick="showTerminal()"><i class="fas fa-terminal" id="show-terminal-fav"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i class="fas fa-link" id="connect-fav"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="showSettings()"><i class="fas fa-cog" id="show-settings-fav"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" onclick="runCode()"><i class="fas fa-play" id="upload-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="terminal-btn" onclick="showTerminal()"><i
+                            class="fas fa-terminal" id="show-terminal-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i
+                            class="fas fa-link" id="connect-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="showSettings()"><i
+                            class="fas fa-cog" id="show-settings-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" onclick="runCode()"><i
+                            class="fas fa-play" id="upload-fav"></i></button>
                 </div>
 
             </div>
@@ -64,10 +69,10 @@
                     </div>
 
                     <div class="row joystick-rows" id="remote-dynamic">
-                        <!-- contains thedynamic elements like joystick and toggle switches -->
+                        <!-- contains the dynamic elements like joystick and toggle switches -->
                         <div class="col-sm-6">
                             <div class="toggle" style="text-align: right;">
-                                <span class="text">Toggle-A</span>
+                                <span class="text" for="toggle-a">Toggle-A</span>
                                 <div class="custom-control custom-switch" id="toggle-a-wrapper">
                                     <input type="checkbox" class="custom-control-input" id="toggle-a">
                                     <label class="custom-control-label text" for="toggle-a"></label>
@@ -79,7 +84,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="toggle" style="text-align: left;">
-                                <span class="text">Toggle-B</span>
+                                <span class="text" for="toggle-b">Toggle-B</span>
                                 <div class="custom-control custom-switch" id="toggle-b-wrapper">
                                     <input type="checkbox" class="custom-control-input" id="toggle-b">
                                     <label class="custom-control-label text" for="toggle-b"></label>
@@ -91,7 +96,8 @@
                         </div>
                     </div>
 
-                    <div class="row joystick-rows" id="remote-statics" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                    <div class="row joystick-rows" id="remote-statics"
+                        style="position: absolute; bottom: 0; right: 0; left: 0;">
                         <!-- contains the static elements such as push-buttons -->
                         <div class="col-sm-6">
                             <div class="joystick-buttons" style="text-align: right;">
@@ -128,12 +134,12 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-0" id="code-div" style="display: none; height: 100%">
                 <div id="code-div-container" style="display: block; height: 98%">
 
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 
@@ -169,19 +175,51 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <i class="fas fa-cog" style="margin: auto 16px auto 4px; align-self: center;"></i>
-                    <h5 class="modal-title" id="settingsModalCenterTitle">Aato Settings</h5>
+                    <h5 class="modal-title headings" id="settingsModalCenterTitle">Aato Settings</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="custom-control custom-switch">
+                    <small class="captions">Connection Settings</small>
+                    <div class="custom-control custom-switch" style="margin-top: 8px;">
                         <input type="checkbox" class="custom-control-input" id="instant-upload-switch">
-                        <label class="custom-control-label" for="instant-upload-switch">Instant Upload</label>
+                        <label class="custom-control-label body-text" for="instant-upload-switch">Instant Upload</label>
                         <small data-toggle="tooltip" data-placement="right"
                             title="Uploads instantly on dropping a block">
                             <i class="fas fa-info-circle"></i>
                         </small>
+                    </div>
+                    <br>
+                    <small class="captions">Joystick Settings</small>
+                    <div class="custom-control custom-switch" style="margin-top: 8px;">
+                        <input type="checkbox" class="custom-control-input" id="sticky-left-js-switch">
+                        <label class="custom-control-label body-text" for="sticky-left-js-switch">Sticky Left
+                            Joystick</label>
+                        <small data-toggle="tooltip" data-placement="right"
+                            title="Joystick does not automatically reset to neutral position">
+                            <i class="fas fa-info-circle"></i>
+                        </small>
+                    </div>
+                    <div class="custom-control custom-switch" style="margin-top: 8px;">
+                            <input type="checkbox" class="custom-control-input" id="sticky-right-js-switch">
+                            <label class="custom-control-label body-text" for="sticky-right-js-switch">Sticky Right
+                                Joystick</label>
+                            <small data-toggle="tooltip" data-placement="right"
+                                title="Joystick does not automatically reset to neutral position">
+                                <i class="fas fa-info-circle"></i>
+                            </small>
+                    </div>
+                    <br>
+                    <small class="captions">Language Settings</small>
+                    <br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lang-checkbox-ta" value="ta">
+                        <label class="form-check-label" for="lang-checkbox-ta">Tamil</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lang-checkbox-en" value="en" checked="true">
+                        <label class="form-check-label" for="lang-checkbox-en">English</label>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -659,6 +697,33 @@
         </category>
         <sep></sep>
         <category name="Variables" colour="#ff2400" custom="VARIABLE"></category>
+        <sep></sep>
+        <category name="Gamepad">
+            <block type="js_indicator">
+                <field name="NAME">indicator_a</field>
+                <field name="STATUS">True</field>
+            </block>
+            <block type="js_indicator_value">
+                <field name="NAME">indicator_a</field>
+            </block>
+            <block type="js_toggle">
+                <field name="NAME">toggle_a</field>
+            </block>
+            <block type="js_button">
+                <field name="NAME">button_a</field>
+            </block>
+            <block type="js_button_statement">
+                <field name="NAME">button_a</field>
+            </block>
+            <block type="js_nipple_statement">
+                <field name="NAME">js_a</field>
+                <field name="STATUS">fw</field>
+            </block>
+            <block type="js_nipple_value">
+                <field name="NAME">js_a</field>
+                <field name="VALUE">js_x</field>
+            </block>
+        </category>
     </xml>
 
     <script src="./js/injector.js"></script>

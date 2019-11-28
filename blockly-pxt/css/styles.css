@@ -18,6 +18,27 @@
     font-size: 100%;
   }
 
+  .headings{
+    font-family: 'Tomorrow', 'sans-serif';
+    font-weight: 500;
+  }
+
+  button{
+    font-family: 'Tomorrow', 'sans-serif';
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .body-text{
+    font-family: 'Tomorrow', 'sans-serif';
+    font-weight: 400;
+  }
+
+  .captions{
+    font-family: 'Tomorrow', 'sans-serif';
+    font-weight: 300;
+  }
+
   #mode-indicator{
     text-align: end;
     font-family: 'Tomorrow', 'sans-serif';

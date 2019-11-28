@@ -21,6 +21,8 @@ let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
 let statusToastBody = document.getElementsByClassName("toast-body")[0];
 let instantUploadSwitch = document.getElementById("instant-upload-switch");
+let stickyLeftJsSwitch = document.getElementById("sticky-left-js-switch");
+let stickyRightJsSwitch = document.getElementById("sticky-right-js-switch");
 let codeDiv = document.getElementById("code-div");
 let remoteDiv = document.getElementById("remote-div");
 
@@ -50,6 +52,12 @@ instantUploadSwitch.onchange = () => {
     }
     sendData(cmd);
     sendData('import gpio, sensors, pwm, utime');
+};
+
+stickyLeftJsSwitch.onchange = () => {
+    if (joystickL != null){
+        joystickL.options.restJoystick = stickyLeftJsSwitch.checked;
+    }
 };
 
 let checkConnectionStatus = () => {
@@ -98,8 +106,10 @@ let showRemote = () => {
 let createJoysticks = () => {
     // try to destroy any existing instances of the joystick
     try{
-        joystickL.destroy();
-        joystickR.destroy();
+        if (joystickL != null){
+            joystickL.destroy();
+            joystickR.destroy();
+        }
     } catch (err) {
         console.log(err);
     }
@@ -154,6 +164,8 @@ let sendPassword = () => {
         if (passCount === 4) parse_send_password();
     });
 }
+
+// life = fun ? live : stillLive;
 
 let parse_send_password = () => {
     let pw = $('#repl-password').val();

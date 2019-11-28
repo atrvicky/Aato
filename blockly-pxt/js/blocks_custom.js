@@ -1114,6 +1114,262 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": 265,
   "tooltip": "Release the servo motor",
   "helpUrl": ""
+},
+{
+  "type": "js_indicator",
+  "message0": "Indicator %1 %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "A",
+          "indicator_a"
+        ],
+        [
+          "B",
+          "indicator_b"
+        ]
+      ]
+    },
+    {
+      "type": "field_dropdown",
+      "name": "STATUS",
+      "options": [
+        [
+          "On",
+          "True"
+        ],
+        [
+          "Off",
+          "False"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 300,
+  "tooltip": "Control the status of the virtual indicators",
+  "helpUrl": ""
+},
+{
+  "type": "js_toggle",
+  "message0": "Toggle Switch %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "A",
+          "toggle_a"
+        ],
+        [
+          "B",
+          "toggle_b"
+        ]
+      ]
+    }
+  ],
+  "output": "Boolean",
+  "colour": 300,
+  "tooltip": "Check the status of the virtual toggle switch",
+  "helpUrl": ""
+},
+{
+  "type": "js_button",
+  "message0": "Button %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "A",
+          "button_a"
+        ],
+        [
+          "B",
+          "button_b"
+        ],
+        [
+          "C",
+          "button_c"
+        ],
+        [
+          "D",
+          "button_d"
+        ]
+      ]
+    }
+  ],
+  "output": "Boolean",
+  "colour": 300,
+  "tooltip": "Check the status of the virtual button",
+  "helpUrl": ""
+},
+{
+  "type": "js_button_statement",
+  "message0": "Press button %1 %2 %3",
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "A",
+          "button_a"
+        ],
+        [
+          "B",
+          "button_b"
+        ],
+        [
+          "C",
+          "button_c"
+        ],
+        [
+          "D",
+          "button_d"
+        ]
+      ]
+    },
+    {
+      "type": "input_statement",
+      "name": "NAME"
+    }
+  ],
+  "colour": 300,
+  "tooltip": "Do something when a virtual button is pressed",
+  "helpUrl": ""
+},
+{
+  "type": "js_nipple_statement",
+  "message0": "Move gamepad %1 %2 %3 %4",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "Left",
+          "js_a"
+        ],
+        [
+          "Right",
+          "js_b"
+        ]
+      ]
+    },
+    {
+      "type": "field_dropdown",
+      "name": "STATUS",
+      "options": [
+        [
+          "forward",
+          "fw"
+        ],
+        [
+          "backward",
+          "bw"
+        ],
+        [
+          "left",
+          "l"
+        ],
+        [
+          "right",
+          "r"
+        ],
+        [
+          "At rest",
+          "rst"
+        ]
+      ]
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_statement",
+      "name": "NAME"
+    }
+  ],
+  "colour": 300,
+  "tooltip": "Do something when a virtual gamepad is used",
+  "helpUrl": ""
+},
+{
+  "type": "js_nipple_value",
+  "message0": "%1 gamepad  %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "Left",
+          "js_a"
+        ],
+        [
+          "Right",
+          "js_b"
+        ]
+      ]
+    },
+    {
+      "type": "field_dropdown",
+      "name": "VALUE",
+      "options": [
+        [
+          "X",
+          "js_x"
+        ],
+        [
+          "Y",
+          "js_y"
+        ]
+      ]
+    }
+  ],
+  "output": null,
+  "colour": 300,
+  "tooltip": "Get the position of the virtual gamepad",
+  "helpUrl": ""
+},
+{
+  "type": "js_indicator_value",
+  "message0": "Indicator %1 %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "A",
+          "indicator_a"
+        ],
+        [
+          "B",
+          "indicator_b"
+        ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "NAME"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 300,
+  "tooltip": "Control the status of the virtual indicators",
+  "helpUrl": ""
 }]); // END OF JSON EXTRACT
 
 function saveWorkspace(){
