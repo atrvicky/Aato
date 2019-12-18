@@ -1337,7 +1337,7 @@ Blockly.defineBlocksWithJsonArray([{
       ]
     }
   ],
-  "output": null,
+  "output": "Number",
   "colour": 300,
   "tooltip": "Get the position of the virtual gamepad",
   "helpUrl": ""
@@ -1362,13 +1362,44 @@ Blockly.defineBlocksWithJsonArray([{
     },
     {
       "type": "input_value",
-      "name": "NAME"
+      "name": "NAME",
+      "check": "Boolean"
     }
   ],
   "previousStatement": null,
   "nextStatement": null,
   "colour": 300,
   "tooltip": "Control the status of the virtual indicators",
+  "helpUrl": ""
+},
+{
+  "type": "js_toggle_statement",
+  "message0": "On Changing Toggle Switch %1 %2 %3",
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "A",
+          "toggle_a"
+        ],
+        [
+          "B",
+          "toggle_b"
+        ]
+      ]
+    },
+    {
+      "type": "input_statement",
+      "name": "NAME"
+    }
+  ],
+  "colour": 300,
+  "tooltip": "Runs the blocks inside it when the toggle switch is toggled",
   "helpUrl": ""
 }]); // END OF JSON EXTRACT
 

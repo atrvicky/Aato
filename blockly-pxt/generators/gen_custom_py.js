@@ -1,3 +1,12 @@
+let sendGET = (code) => {
+  code = code.replace(/ /g, '%20')
+  code = code.replace(/\n/g, '&')
+  let root = 'http://192.168.4.1/?';
+  code = root + code + '?/';
+  console.log(code);
+  $.get(code);
+};
+
 Blockly.Python['csl_led_toggle'] = function(block) {
   let dropdown_name = block.getFieldValue('NAME');
   // TODO: Assemble Python into code variable.
@@ -284,6 +293,80 @@ Blockly.Python['servo_release'] = function(block) {
   let dropdown_gpio_choice = block.getFieldValue('gpio_choice');
   // TODO: Assemble Python into code variable.
   let code = 'gpio.release_servo(' + dropdown_gpio_choice + ')\r\n';
+  return code;
+};
+
+Blockly.Python['js_indicator'] = function(block) {
+  let dropdown_name = block.getFieldValue('NAME');
+  // can be either 'indicator_a' or 'indicator_b'
+
+  let dropdown_status = block.getFieldValue('STATUS');
+  // can be either 'True' or 'False'
+
+  // TODO: Assemble Python into code variable.
+  let code = '...';
+  return code;
+};
+
+Blockly.Python['js_toggle'] = function(block) {
+
+  let toggle_a = document.getElementById('toggle-a');
+  let toggle_b = document.getElementById('toggle-b');
+
+  let dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  let code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Python['js_toggle_statement'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  var statements_name = Blockly.Python.statementToCode(block, 'NAME');
+  // TODO: Assemble JavaScript into code variable.
+  var code = statements_name;
+  return code;
+};
+
+Blockly.Python['js_button'] = function(block) {
+  let dropdown_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  let code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Python['js_button_statement'] = function(block) {
+  let dropdown_name = block.getFieldValue('NAME');
+  let statements_name = Blockly.Python.statementToCode(block, 'NAME');
+  // TODO: Assemble Python into code variable.
+  let code = statements_name;
+  return code;
+};
+
+Blockly.Python['js_nipple_statement'] = function(block) {
+  let dropdown_name = block.getFieldValue('NAME');
+  let dropdown_status = block.getFieldValue('STATUS');
+  let statements_name = Blockly.Python.statementToCode(block, 'NAME');
+  // TODO: Assemble Python into code variable.
+  let code = '...\n';
+  return code;
+};
+
+Blockly.Python['js_nipple_value'] = function(block) {
+  let dropdown_name = block.getFieldValue('NAME');
+  let dropdown_value = block.getFieldValue('VALUE');
+  // TODO: Assemble Python into code variable.
+  let code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Python['js_indicator_value'] = function(block) {
+  let dropdown_name = block.getFieldValue('NAME');
+  let value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  let code = '...\n';
   return code;
 };
 

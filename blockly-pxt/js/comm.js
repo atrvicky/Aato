@@ -4,6 +4,7 @@ let ws;
 let url = "ws://192.168.4.1:8266/"
 let connected = false;
 let instantUpload = false;
+let gamepadEnabled = true;
 let joystickSizePercent = 0.25;
 let binary_state = 0;
 let put_file_name = null;
@@ -21,8 +22,7 @@ let uploadBtnFav = document.getElementById("upload-fav");
 let fileStatus = document.getElementById("file-status");
 let statusToastBody = document.getElementsByClassName("toast-body")[0];
 let instantUploadSwitch = document.getElementById("instant-upload-switch");
-let stickyLeftJsSwitch = document.getElementById("sticky-left-js-switch");
-let stickyRightJsSwitch = document.getElementById("sticky-right-js-switch");
+let enableGamepadSwitch = document.getElementById("enable-js-switch");
 let codeDiv = document.getElementById("code-div");
 let remoteDiv = document.getElementById("remote-div");
 
@@ -39,7 +39,7 @@ let initConnection = () => {
         connect(url);
     }
     checkConnectionStatus();
-}
+};
 
 instantUploadSwitch.onchange = () => {
     instantUpload = !instantUpload;
@@ -54,11 +54,14 @@ instantUploadSwitch.onchange = () => {
     sendData('import gpio, sensors, pwm, utime');
 };
 
-stickyLeftJsSwitch.onchange = () => {
-    if (joystickL != null){
-        joystickL.options.restJoystick = stickyLeftJsSwitch.checked;
-    }
+
+enableGamepadSwitch.onchange = () => {
+    gamepadEnabled = enableGamepadSwitch.checked;
+    let gamepadBlockTree = document.getElementById(':g');
+    gamepadBlockTree.style.display = gamepadEnabled ? 'block' : 'none';
 };
+
+enableGamepadSwitch.checked = true;
 
 let checkConnectionStatus = () => {
     connectBtn.innerHTML = connected ? disconnectFav : connectFav;
@@ -130,13 +133,31 @@ let createJoysticks = () => {
         position: { left: joystickLeft, top: joystickTop },
         size: joystickSize
     });
+    
     joystickR = nipplejs.create({
         zone: rightJsWrapper,
         mode: 'static',
         color: 'red',
         position: { left: joystickLeft, top: joystickTop },
         size: joystickSize
-    });    
+    });
+    
+    // set the joystick listeners
+    // nippleA start
+    joystickL.on('move', (evt, data) => {
+        console.log('x:' + data.direction.x);
+        console.log('y:' + data.direction.y);
+        console.log('dist:' + data.distance);
+    });
+    // nippleA end
+
+    // nippleB start
+    joystickR.on('move', (evt, data) => {
+        console.log('x:' + data.direction.x);
+        console.log('y:' + data.direction.y);
+        console.log('dist:' + data.distance);
+    });
+    // nippleB end
 
     // adjust the button sizes
     let btnA = document.getElementById('btn-a');

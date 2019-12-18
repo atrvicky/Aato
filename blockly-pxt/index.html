@@ -42,12 +42,12 @@
                 <div id="buttons-wrapper">
                     <button type="button" class="btn btn-light btn-sm" id="terminal-btn" onclick="showTerminal()"><i
                             class="fas fa-terminal" id="show-terminal-fav"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="connect-btn" onclick="initConnection()"><i
-                            class="fas fa-link" id="connect-fav"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" style="display: none;" id="connect-btn"
+                        onclick="initConnection()"><i class="fas fa-link" id="connect-fav"></i></button>
                     <button type="button" class="btn btn-light btn-sm" id="settings-btn" onclick="showSettings()"><i
                             class="fas fa-cog" id="show-settings-fav"></i></button>
-                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" onclick="runCode()"><i
-                            class="fas fa-play" id="upload-fav"></i></button>
+                    <!-- <button type="button" class="btn btn-light btn-sm" id="upload-btn" onclick="runCode()"><i class="fas fa-play" id="upload-fav"></i></button> -->
+                    <button type="button" class="btn btn-light btn-sm" id="upload-btn" onclick=""><i class="fas fa-play" id="upload-fav"></i></button>
                 </div>
 
             </div>
@@ -190,40 +190,78 @@
                             <i class="fas fa-info-circle"></i>
                         </small>
                     </div>
-                    <br>
-                    <small class="captions">Joystick Settings</small>
                     <div class="custom-control custom-switch" style="margin-top: 8px;">
-                        <input type="checkbox" class="custom-control-input" id="sticky-left-js-switch">
-                        <label class="custom-control-label body-text" for="sticky-left-js-switch">Sticky Left
-                            Joystick</label>
+                        <input type="checkbox" class="custom-control-input" id="webrepl-switch" disabled="true">
+                        <label class="custom-control-label body-text" for="webrepl-switch">Use WebREPL Protocol</label>
                         <small data-toggle="tooltip" data-placement="right"
-                            title="Joystick does not automatically reset to neutral position">
+                            title="Used for tesing and on firmware older than V2.0">
                             <i class="fas fa-info-circle"></i>
                         </small>
                     </div>
+                    <br>
+                    <small class="captions">Gamepad Settings</small>
                     <div class="custom-control custom-switch" style="margin-top: 8px;">
-                            <input type="checkbox" class="custom-control-input" id="sticky-right-js-switch">
-                            <label class="custom-control-label body-text" for="sticky-right-js-switch">Sticky Right
-                                Joystick</label>
-                            <small data-toggle="tooltip" data-placement="right"
-                                title="Joystick does not automatically reset to neutral position">
-                                <i class="fas fa-info-circle"></i>
-                            </small>
+                        <input type="checkbox" class="custom-control-input" id="enable-js-switch">
+                        <label class="custom-control-label body-text" for="enable-js-switch">Enable Gamepad</label>
+                        <small data-toggle="tooltip" data-placement="right" title="Show or hide Gamepad blocks">
+                            <i class="fas fa-info-circle"></i>
+                        </small>
                     </div>
+                    <label class="body-text" style="margin-top: 12px;">Left gamepad motion control</label> <small data-toggle="tooltip" data-placement="right"
+                    title="Gamepad movement control"><i class="fas fa-info-circle"></i></small>
+                    <br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="leftGamepadOptions"
+                            id="leftGamepadOptionsRadioX" value="x">
+                        <label class="form-check-label body-text" for="leftGamepadOptionsRadioX">Only X</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="leftGamepadOptions"
+                            id="leftGamepadOptionsRadioY" value="y">
+                        <label class="form-check-label body-text" for="leftGamepadOptionsRadioY">Only Y</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="leftGamepadOptions"
+                            id="leftGamepadOptionsRadioBoth" value="b" checked="true">
+                        <label class="form-check-label body-text" for="leftGamepadOptionsRadioBoth">X & Y</label>
+                    </div>
+                    <br>
+                    <label class="body-text" style="margin-top: 12px;">Right gamepad motion control</label> <small data-toggle="tooltip" data-placement="right"
+                    title="Gamepad movement control"><i class="fas fa-info-circle"></i></small>
+                    <br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rightGamepadOptions"
+                            id="rightGamepadOptionsRadioX" value="x">
+                        <label class="form-check-label body-text" for="rightGamepadOptionsRadioX">Only X</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rightGamepadOptions"
+                            id="rightGamepadOptionsRadioY" value="y">
+                        <label class="form-check-label body-text" for="rightGamepadOptionsRadioY">Only Y</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rightGamepadOptions"
+                            id="rightGamepadOptionsRadioBoth" value="b" checked="true">
+                        <label class="form-check-label body-text" for="rightGamepadOptionsRadioBoth">X & Y</label>
+                    </div>                    
+                    <br>
                     <br>
                     <small class="captions">Language Settings</small>
                     <br>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lang-checkbox-ta" value="ta">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lang-checkbox-ta" disabled="true"
+                            value="ta">
                         <label class="form-check-label" for="lang-checkbox-ta">Tamil</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lang-checkbox-en" value="en" checked="true">
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lang-checkbox-en"
+                            value="en" checked="true">
                         <label class="form-check-label" for="lang-checkbox-en">English</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="">Close</button>
+                    <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal"
+                        onclick="">Close</button>
                 </div>
             </div>
         </div>
@@ -709,6 +747,9 @@
             <block type="js_toggle">
                 <field name="NAME">toggle_a</field>
             </block>
+            <block type="js_toggle_statement">
+                <field name="NAME">toggle_a</field>
+            </block>
             <block type="js_button">
                 <field name="NAME">button_a</field>
             </block>
@@ -780,6 +821,7 @@
                 // console.log(pyCode);
                 let code = document.getElementById("code");
                 // code.innerText = pyCode;
+                sendGET(pyCode);
                 updateCode(pyCode);
 
                 if (instantUpload) {
@@ -794,6 +836,8 @@
     </script>
 
     <script src="./monaco-editor/min/vs/loader.js"></script>
+    <script src="./js/remote.js"></script>
+
 </body>
 
 </html>

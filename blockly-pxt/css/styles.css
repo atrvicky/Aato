@@ -90,6 +90,10 @@
     color: #ff2400;
   }
 
+  .indicator .light-disabled{
+    color: #8A7E72;
+  }
+
   #buttons-wrapper{
     text-align: end;
   }
