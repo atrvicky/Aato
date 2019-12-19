@@ -1250,7 +1250,7 @@ Blockly.defineBlocksWithJsonArray([{
 },
 {
   "type": "js_nipple_statement",
-  "message0": "Move gamepad %1 %2 %3 %4",
+  "message0": "Move %1 gamepad %2 %3 %4",
   "args0": [
     {
       "type": "field_dropdown",
@@ -1272,11 +1272,11 @@ Blockly.defineBlocksWithJsonArray([{
       "options": [
         [
           "forward",
-          "fw"
+          "f"
         ],
         [
           "backward",
-          "bw"
+          "b"
         ],
         [
           "left",
@@ -1400,6 +1400,98 @@ Blockly.defineBlocksWithJsonArray([{
   ],
   "colour": 300,
   "tooltip": "Runs the blocks inside it when the toggle switch is toggled",
+  "helpUrl": ""
+},
+{
+  "type": "dog_direction",
+  "message0": "Move Doggo %1 %2 steps",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "STATUS",
+      "options": [
+        [
+          "forward",
+          "f"
+        ],
+        [
+          "backward",
+          "b"
+        ],
+        [
+          "left",
+          "l"
+        ],
+        [
+          "right",
+          "r"
+        ]
+      ]
+    },
+    {
+      "type": "field_number",
+      "name": "NAME",
+      "value": 0,
+      "min": 1,
+      "max": 50,
+      "precision": 1
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 250,
+  "tooltip": "Move the dog",
+  "helpUrl": ""
+},
+{
+  "type": "dog_stance",
+  "message0": "Doggo Stance %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "STATUS",
+      "options": [
+        [
+          "up",
+          "u"
+        ],
+        [
+          "down",
+          "d"
+        ],
+        [
+          "left",
+          "l"
+        ],
+        [
+          "right",
+          "r"
+        ]
+      ]
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 250,
+  "tooltip": "Change the stance of the dog",
+  "helpUrl": ""
+},
+{
+  "type": "dog_sit",
+  "message0": "Doggo Sit",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 250,
+  "tooltip": "Make Doggo sit",
+  "helpUrl": ""
+},
+{
+  "type": "dog_stand",
+  "message0": "Doggo Stand",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 250,
+  "tooltip": "Make Doggo stand",
   "helpUrl": ""
 }]); // END OF JSON EXTRACT
 

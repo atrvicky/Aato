@@ -145,17 +145,83 @@ let createJoysticks = () => {
     // set the joystick listeners
     // nippleA start
     joystickL.on('move', (evt, data) => {
-        console.log('x:' + data.direction.x);
-        console.log('y:' + data.direction.y);
-        console.log('dist:' + data.distance);
+        let block = grabBlock('js_nipple_statement', 'js_a');
+        let code = Blockly.Python.js_nipple_statement(block);
+        
+        let size = data.instance.options.size;
+        size /= 2;
+        
+        let intensity = Math.ceil(data.distance / size * 100);
+        
+        let dir = 'up';
+        let lx = 0;
+        let ly = 0;
+        if (data.angle.degree >= 45 && data.angle.degree <= 135){
+            dir = 'up';
+            ly = intensity;
+            lx = 0;
+        } else if (data.angle.degree >= 225 && data.angle.degree <= 315){
+            dir = 'down';
+            ly = -intensity;
+            lx = 0;
+        } else if (data.angle.degree > 135 && data.angle.degree < 225){
+            dir = 'left';
+            lx = -intensity;
+            ly = 0;
+        } else {
+            dir = 'right';
+            lx = intensity;
+            ly = 0;
+        }
+
+        console.log('lx:' + lx);
+        console.log('ly:' + ly);
+        console.log('ldist:' + data.distance);
+
+        if ((block.getFieldValue('STATUS') == 'f' && dir == 'up') || (block.getFieldValue('STATUS') == 'b' && dir == 'down') || (block.getFieldValue('STATUS') == 'l' && dir == 'left') || (block.getFieldValue('STATUS') == 'r' && dir == 'right')){
+            sendGET(code);
+        }
     });
     // nippleA end
 
     // nippleB start
     joystickR.on('move', (evt, data) => {
-        console.log('x:' + data.direction.x);
-        console.log('y:' + data.direction.y);
-        console.log('dist:' + data.distance);
+        let block = grabBlock('js_nipple_statement', 'js_b');
+        let code = Blockly.Python.js_nipple_statement(block);
+        
+        let size = data.instance.options.size;
+        size /= 2;
+        
+        let intensity = Math.ceil(data.distance / size * 100);
+        
+        let dir = 'up';
+        let rx = 0;
+        let ry = 0;
+        if (data.angle.degree >= 45 && data.angle.degree <= 135){
+            dir = 'up';
+            ry = intensity;
+            rx = 0;
+        } else if (data.angle.degree >= 225 && data.angle.degree <= 315){
+            dir = 'down';
+            ry = -intensity;
+            rx = 0;
+        } else if (data.angle.degree > 135 && data.angle.degree < 225){
+            dir = 'left';
+            rx = -intensity;
+            ry = 0;
+        } else {
+            dir = 'right';
+            rx = intensity;
+            ry = 0;
+        }
+
+        console.log('rx:' + rx);
+        console.log('ry:' + ry);
+        console.log('ldist:' + data.distance);
+
+        if ((block.getFieldValue('STATUS') == 'f' && dir == 'up') || (block.getFieldValue('STATUS') == 'b' && dir == 'down') || (block.getFieldValue('STATUS') == 'l' && dir == 'left') || (block.getFieldValue('STATUS') == 'r' && dir == 'right')){
+            sendGET(code);
+        }
     });
     // nippleB end
 

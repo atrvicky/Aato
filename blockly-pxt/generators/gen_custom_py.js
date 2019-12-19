@@ -349,7 +349,7 @@ Blockly.Python['js_nipple_statement'] = function(block) {
   let dropdown_status = block.getFieldValue('STATUS');
   let statements_name = Blockly.Python.statementToCode(block, 'NAME');
   // TODO: Assemble Python into code variable.
-  let code = '...\n';
+  let code = statements_name;
   return code;
 };
 
@@ -367,6 +367,47 @@ Blockly.Python['js_indicator_value'] = function(block) {
   let value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble Python into code variable.
   let code = '...\n';
+  return code;
+};
+
+Blockly.Python['dog_direction'] = function(block) {
+  var dropdown_status = block.getFieldValue('STATUS');
+  var number_name = block.getFieldValue('NAME');
+  // TODO: Assemble Python into code variable.
+  var code = '';
+  switch (number_name){
+    case 'f':
+      code = 'dog.forward()\n';
+      break;
+    case 'b':
+      code = 'dog.backward()\n';
+      break;
+    case 'l':
+      code = 'dog.left()\n';
+      break;
+    case 'r':
+      code = 'dog.right()\n';
+      break;
+  }
+  return code;
+};
+
+Blockly.Python['dog_stance'] = function(block) {
+  var dropdown_status = block.getFieldValue('STATUS');
+  // TODO: Assemble Python into code variable.
+  var code = 'dog.stance(' + dropdown_status + ')\n';
+  return code;
+};
+
+Blockly.Python['dog_stand'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = 'dog.stand()\n';
+  return code;
+};
+
+Blockly.Python['dog_sit'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = 'dog.sit()\n';
   return code;
 };
 
