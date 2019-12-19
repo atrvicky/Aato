@@ -375,18 +375,18 @@ Blockly.Python['dog_direction'] = function(block) {
   var number_name = block.getFieldValue('NAME');
   // TODO: Assemble Python into code variable.
   var code = '';
-  switch (number_name){
+  switch (dropdown_status){
     case 'f':
-      code = 'dog.forward()\n';
+      code = 'dog.forward(' + number_name +')\n';
       break;
     case 'b':
-      code = 'dog.backward()\n';
+      code = 'dog.backward(' + number_name +')\n';
       break;
     case 'l':
-      code = 'dog.left()\n';
+      code = 'dog.left(' + number_name +')\n';
       break;
     case 'r':
-      code = 'dog.right()\n';
+      code = 'dog.right(' + number_name +')\n';
       break;
   }
   return code;
